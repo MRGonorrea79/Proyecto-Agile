@@ -7,7 +7,7 @@ Aplicación web desarrollada con **Spring Boot** que permite la traducción bidi
 - **Repositorio del código fuente:** [Spanish-Braille-Application (ITERACION-2)](https://github.com/MRGonorrea79/Spanish-Braille-Application/tree/ITERACION-2)
 - **Metodología:** XP (Extreme Programming)
 - **Herramienta de gestión:** GitHub
-- **Materia:** Metodologías Ágiles — Construcción y Evolución de Software
+- **Materia:** Metodologías Ágiles
 
 ---
 
