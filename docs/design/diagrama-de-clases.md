@@ -1,221 +1,285 @@
 # Diagrama de Clases
 
-## Transcriptor Braille Español
+## Spanish Braille Application
 
-**Proyecto:** Spanish Braille Application  
-**Rol:** Diseño (Elian Caizapanta)  
-**Iteración:** 2  
+**Fase XP:** II. Diseño  
+**Rol:** Programador — Diseño (Elian Caizapanta)  
+**Basado en:** Tarjetas CRC, Historias de Usuario V2 (01H1–07H7) y código existente (ITERACION-2)
 
 ---
 
-### Diagrama de Clases (Diseño Prototipo)
-
-> **Nota:** Los nombres de las clases representan el diseño conceptual previo a la implementación. La columna de mapeo al final del documento relaciona cada clase prototipo con su implementación final.
+### Diagrama de Clases General
 
 ```mermaid
 classDiagram
-    class AplicacionPrincipal {
-        +main(args: String[]) void
+    direction TB
+
+    class ConversionController {
+        <<Controller>>
+        -brailleConverterService : BrailleConverterService
+        -inverseBrailleService : InverseBrailleService
+        +index() String
+        +convertirEspañolABraille(texto : String, model : Model) String
+        +convertirBrailleAEspañol(texto : String, model : Model) String
+        +convertirEspejo(texto : String, model : Model) String
     }
 
-    class ControladorTraduccion {
-        -traductor: TraductorTexto
-        +mostrarPaginaPrincipal() String
-        +procesarTextoEspanol(texto: String, modelo: Modelo) String
-        +procesarTextoBraille(texto: String, modelo: Modelo) String
-        +procesarTextoEspejo(texto: String, modelo: Modelo) String
+    class BrailleConverterService {
+        <<Service>>
+        -alphabetMapService : AlphabetMapService
+        -accentMapService : AccentMapService
+        -numberMapService : NumberMapService
+        -upperCaseHandlerService : UpperCaseHandlerService
+        -punctuationMapService : PunctuationMapService
+        +convertirTextoABraille(texto : String) String
+        -procesarPalabra(palabra : String) String
+        -manejarEspacios(palabras : String[]) String
     }
 
-    class TraductorTexto {
-        -SIGNO_NUMERO: int
-        -SIGNO_MAYUSCULA: int
-        -SIGNO_NUMERO_ESPEJO: int
-        -SIGNO_MAYUSCULA_ESPEJO: int
-        -diccionario: DiccionarioBraille
-        -mapaDirecto: Map~String, Integer~
-        -mapaInverso: Map~Integer, String~
-        -mapaEspejo: Map~String, Integer~
-        +convertirEspanolABraille(texto: String) String
-        +convertirBrailleAEspanol(textoBraille: String) String
-        +convertirEspanolABrailleEspejo(texto: String) String
-        -generarMascara(puntos: int[]) int
-        -agregarPunto(base: int, punto: int) int
-        -mascaraAUnicode(mascara: int) String
-        -esPalabraMayusculaCompleta(palabra: String) boolean
-        -caracterBrailleAMascara(braille: char) int
-        -letraADigito(letra: String) String
+    class AlphabetMapService {
+        <<Service>>
+        -mapaAlfabeto : Map~String, Integer~
+        +obtenerPatronBraille(letra : String) Integer
+        +existeLetra(letra : String) boolean
+        -inicializarSerie1() void
+        -inicializarSerie2() void
+        -inicializarSerie3() void
     }
 
-    class DiccionarioBraille {
-        -SIGNO_NUMERO: int
-        -SIGNO_NUMERO_ESPEJO: int
-        -mapaDirecto: Map~String, Integer~
-        -mapaInverso: Map~Integer, String~
-        -mapaEspejo: Map~String, Integer~
-        +DiccionarioBraille()
-        +obtenerMapaDirecto() Map~String, Integer~
-        +obtenerMapaEspejo() Map~String, Integer~
-        +obtenerMapaInverso() Map~Integer, String~
-        -inicializarLetras() void
-        -inicializarAcentos() void
-        -inicializarPuntuacion() void
-        -inicializarNumeros() void
-        -inicializarMapaInverso() void
-        -generarMascara(puntos: int[]) int
-        -agregarPunto(base: int, punto: int) int
+    class AccentMapService {
+        <<Service>>
+        -mapaAcentos : Map~String, Integer~
+        +obtenerPatronAcento(caracter : String) Integer
+        +esCaracterAcentuado(caracter : String) boolean
     }
 
-    class ConvertidorInverso {
-        -mapaInverso: Map~Integer, String~
-        -SIGNO_NUMERO: int
-        -SIGNO_MAYUSCULA: int
-        +ConvertidorInverso()
-        +convertirBrailleAEspanol(textoBraille: String) String
-        -inicializarMapaInverso() void
-        -caracterBrailleAMascara(braille: char) int
-        -generarMascara(puntos: int[]) int
-        -registrar(caracter: String, mascara: int) void
-        -letraADigito(letra: String) String
+    class NumberMapService {
+        <<Service>>
+        -mapaNumeros : Map~String, Integer~
+        -SIGNO_NUMERO : int
+        +obtenerPatronNumero(digito : String) Integer
+        +esDigito(caracter : char) boolean
+        +obtenerSignoNumero() Integer
     }
 
-    AplicacionPrincipal ..> ControladorTraduccion : inicia
-    ControladorTraduccion --> TraductorTexto : usa
-    TraductorTexto --> DiccionarioBraille : consulta
-    ConvertidorInverso --|> TraductorTexto : extiende funcionalidad
+    class UpperCaseHandlerService {
+        <<Service>>
+        -SIGNO_MAYUSCULA : int
+        +esMayuscula(caracter : char) boolean
+        +obtenerIndicadorMayuscula() Integer
+        +convertirAMinuscula(caracter : String) String
+    }
+
+    class PunctuationMapService {
+        <<Service>>
+        -mapaPuntuacion : Map~String, Integer~
+        +obtenerPatronPuntuacion(signo : String) Integer
+        +esSignoPuntuacion(caracter : String) boolean
+    }
+
+    class BrailleRendererService {
+        <<Service>>
+        +convertirAUnicode(mascara : int) String
+        +generarSVGCuadratin(mascara : int) String
+        +renderizarCadena(cadena : String) String
+    }
+
+    class SignaleticsService {
+        <<Service>>
+        -brailleConverterService : BrailleConverterService
+        +generarSenaletika(texto : String) Senaletika
+        +exportarPNG(senaletika : Senaletika) byte[]
+        +exportarPDF(senaletika : Senaletika) byte[]
+    }
+
+    class InverseBrailleService {
+        <<Service>>
+        -mapaInverso : Map~Integer, String~
+        -SIGNO_NUMERO : int
+        -SIGNO_MAYUSCULA : int
+        +brailleAEspañol(textoBraille : String) String
+        -procesarCaracterBraille(mascara : int) String
+        -brailleCharToMask(c : char) int
+    }
+
+    class BrailleCharacterMap {
+        <<Data>>
+        -mapaNormal : Map~String, Integer~
+        -mapaEspejo : Map~String, Integer~
+        -mapaInverso : Map~Integer, String~
+        +getMapaNormal() Map
+        +getMapaEspejo() Map
+        +getMapaInverso() Map
+        -mask(dots : int[]) int
+        -addDot(base : int, dot : int) int
+    }
+
+    class ConversionView {
+        <<View - Thymeleaf/HTML>>
+        +campoEntradaTexto : TextArea
+        +areaSalidaBraille : Div
+        +botonConvertir : Button
+        +botonLimpiar : Button
+        +vistaSeñaletica : Section
+    }
+
+    %% Relaciones
+    ConversionController --> BrailleConverterService : usa
+    ConversionController --> InverseBrailleService : usa
+    ConversionController --> SignaleticsService : usa
+    ConversionController --> ConversionView : retorna vista
+
+    BrailleConverterService --> AlphabetMapService : delega letras
+    BrailleConverterService --> AccentMapService : delega acentos
+    BrailleConverterService --> NumberMapService : delega números
+    BrailleConverterService --> UpperCaseHandlerService : delega mayúsculas
+    BrailleConverterService --> PunctuationMapService : delega puntuación
+
+    AlphabetMapService --> BrailleCharacterMap : consulta
+    AccentMapService --> BrailleCharacterMap : consulta
+    NumberMapService --> BrailleCharacterMap : consulta
+    PunctuationMapService --> BrailleCharacterMap : consulta
+    UpperCaseHandlerService --> AlphabetMapService : delega letra
+
+    BrailleRendererService --> ConversionController : provee renderizado
+    BrailleRendererService --> ConversionView : inyecta HTML/SVG
+
+    SignaleticsService --> BrailleConverterService : usa conversión
+
+    InverseBrailleService --> BrailleCharacterMap : consulta mapa inverso
 ```
 
 ---
 
-### Descripción de Clases
+### Mapeo Diseño (CRC) → Implementación Real → HU V2
 
-#### AplicacionPrincipal
-Punto de entrada de la aplicación Spring Boot. Se encarga de inicializar el contenedor de Spring, cargar los componentes y arrancar el servidor web embebido.
+| Clase CRC (Diseño) | Clase Real (Código ITERACION-2) | HU V2 |
+|---------------------|--------------------------------|-------|
+| ConversionController | `TranscriptionController.java` | 01H1, 06H6, 07H7 |
+| BrailleConverterService | `BrailleMapper.java` → `españolABraille()` | 01H1, 02H2, 03H3, 04H4, 05H5 |
+| AlphabetMapService | `BrailleDictionary.java` → `initLetters()` | 01H1 |
+| AccentMapService | `BrailleDictionary.java` → `initAccents()` | 02H2 |
+| NumberMapService | `BrailleDictionary.java` → `initNumbers()` + `BrailleMapper` (lógica numérica) | 03H3 |
+| UpperCaseHandlerService | `BrailleMapper.java` → `SIGNO_MAYUSCULA = mask(4,6)` | 04H4 |
+| PunctuationMapService | `BrailleDictionary.java` → `initPunctuation()` | 05H5 |
+| BrailleRendererService | `BrailleMapper.java` → `maskToUnicode()` | 01H1 (renderizado) |
+| SignaleticsService | *Pendiente — Sprint 2* | 06H6 |
+| InverseBrailleService | `BrailleMapper.java` → `brailleAEspañol()` + `EspañolMapper.java` | 07H7 |
+| BrailleCharacterMap | `BrailleDictionary.java` → mapas `map`, `pam`, `reverseMap` | 01H1–05H5, 07H7 |
+| ConversionView | `index.html`, `result-español.html`, `result-braille.html`, `result-espejo.html` | 01H1, 06H6, 07H7 |
 
-#### ControladorTraduccion
-Controlador web que gestiona las solicitudes HTTP del usuario. Recibe texto desde formularios HTML y delega la lógica de conversión al `TraductorTexto`. Expone tres endpoints principales:
-- `GET /` — Página principal con formularios de entrada
-- `POST /transcribir-Español` — Convierte español a Braille
-- `POST /transcribir-Braille` — Convierte Braille a español
-- `POST /espejo` — Genera Braille invertido para impresión
-
-#### TraductorTexto
-Servicio central de traducción bidireccional. Contiene la lógica para:
-- **Español → Braille:** Normaliza espacios, detecta números/mayúsculas, y convierte cada carácter usando el diccionario.
-- **Braille → Español:** Interpreta signos de control (número, mayúscula) y busca cada máscara en el mapa inverso.
-- **Español → Braille Espejo:** Usa el mapa espejo donde los puntos se reflejan horizontalmente (1↔4, 2↔5, 3↔6) y luego invierte la cadena resultante.
-
-#### DiccionarioBraille
-Almacén de datos que mantiene tres mapas de correspondencia:
-- **Mapa Directo:** Carácter español → máscara de puntos Braille
-- **Mapa Inverso:** Máscara de puntos → carácter español
-- **Mapa Espejo:** Carácter español → máscara de puntos Braille reflejados
-
-Inicializa las correspondencias para letras (a-z), vocales acentuadas (á,é,í,ó,ú), caracteres especiales (ñ, ü), signos de puntuación y números (0-9).
-
-#### ConvertidorInverso
-Servicio especializado para la conversión Braille → Español. Mantiene su propio mapa inverso con soporte extendido para signos auxiliares adicionales (@, %, ^, &, /, ").
+> **Nota:** El diseño CRC propone 12 clases con responsabilidades separadas (SRP). La implementación actual consolida en 3 clases principales (`TranscriptionController`, `BrailleMapper`, `BrailleDictionary`) + `EspañolMapper` + plantillas HTML.
 
 ---
 
-### Diagrama de Secuencia: Español → Braille
+### Diagrama de Secuencia — Español → Braille (HU 01H1–05H5)
 
 ```mermaid
 sequenceDiagram
     actor U as Usuario
-    participant C as ControladorTraduccion
-    participant T as TraductorTexto
-    participant D as DiccionarioBraille
+    participant V as ConversionView
+    participant C as ConversionController
+    participant S as BrailleConverterService
+    participant A as AlphabetMapService
+    participant Ac as AccentMapService
+    participant N as NumberMapService
+    participant Up as UpperCaseHandlerService
+    participant P as PunctuationMapService
+    participant R as BrailleRendererService
+    participant M as BrailleCharacterMap
 
-    U->>C: POST /transcribir-Español (texto)
-    C->>T: convertirEspanolABraille(texto)
-    T->>T: normalizar espacios
-    T->>T: separar por palabras
-
-    loop Para cada palabra
-        T->>T: detectar si es número o mayúscula completa
-        alt Palabra en mayúsculas
-            T->>T: anteponer ⠠⠠
-        end
-        loop Para cada carácter
-            alt Es dígito
-                T->>T: anteponer signo número ⠼ (si es primer dígito)
-                T->>D: obtenerMapaDirecto().get(dígito)
-                D-->>T: máscara de puntos
-            else Es mayúscula individual
-                T->>T: anteponer signo mayúscula ⠠
-                T->>D: obtenerMapaDirecto().get(letra minúscula)
-                D-->>T: máscara de puntos
-            else Es minúscula/acento/signo
-                T->>D: obtenerMapaDirecto().get(carácter)
-                D-->>T: máscara de puntos
-            end
-            T->>T: mascaraAUnicode(máscara) → char Unicode
+    U->>V: Ingresa texto y clic "Convertir"
+    V->>C: POST /transcribir-Español (texto)
+    C->>S: convertirTextoABraille(texto)
+    
+    loop Por cada carácter
+        alt Es mayúscula (HU 04H4)
+            S->>Up: esMayuscula(char)
+            Up-->>S: true + indicador mayúscula (puntos 46)
+            Up->>A: obtenerPatronBraille(minúscula)
+            A->>M: consultar mapa
+            M-->>A: patrón de puntos
+            A-->>Up: cuadratín
+        else Es dígito (HU 03H3)
+            S->>N: esDigito(char)
+            N->>M: consultar mapa + signo número (3456)
+            M-->>N: patrón
+            N-->>S: cuadratín con signo
+        else Es acento/ñ (HU 02H2)
+            S->>Ac: esCaracterAcentuado(char)
+            Ac->>M: consultar tabla adicional
+            M-->>Ac: patrón
+            Ac-->>S: cuadratín
+        else Es puntuación (HU 05H5)
+            S->>P: esSignoPuntuacion(char)
+            P->>M: consultar sección signos
+            M-->>P: patrón
+            P-->>S: cuadratín
+        else Es letra normal (HU 01H1)
+            S->>A: obtenerPatronBraille(char)
+            A->>M: consultar mapa series 1,2,3
+            M-->>A: patrón
+            A-->>S: cuadratín
         end
     end
-
-    T-->>C: texto Braille Unicode
-    C-->>U: vista resultado con Braille
+    
+    S-->>C: cadena Braille completa
+    C->>R: renderizar para vista (maskToUnicode)
+    R-->>C: HTML con Unicode Braille
+    C-->>V: resultado Braille
+    V-->>U: muestra cuadratines Braille
 ```
 
 ---
 
-### Diagrama de Secuencia: Braille → Español
+### Diagrama de Secuencia — Braille → Español (HU 07H7)
 
 ```mermaid
 sequenceDiagram
     actor U as Usuario
-    participant C as ControladorTraduccion
-    participant T as TraductorTexto
-    participant D as DiccionarioBraille
+    participant V as ConversionView
+    participant C as ConversionController
+    participant I as InverseBrailleService
+    participant M as BrailleCharacterMap
 
-    U->>C: POST /transcribir-Braille (textoBraille)
-    C->>T: convertirBrailleAEspanol(textoBraille)
-
-    loop Para cada carácter Braille
-        T->>T: caracterBrailleAMascara(char)
-
-        alt Máscara == SIGNO_NUMERO
-            T->>T: activar modo número
-        else Máscara == SIGNO_MAYUSCULA
-            alt Siguiente también es SIGNO_MAYUSCULA
-                T->>T: activar mayúscula palabra completa
-            else
-                T->>T: activar mayúscula siguiente letra
-            end
-        else Carácter normal
-            T->>D: obtenerMapaInverso().get(máscara)
-            D-->>T: carácter español
-            alt Modo número activo
-                T->>T: letraADigito(letra) → dígito
-            else Modo mayúscula
-                T->>T: toUpperCase()
+    U->>V: Ingresa texto Braille y clic "Convertir"
+    V->>C: POST /transcribir-Braille (texto)
+    C->>I: brailleAEspañol(textoBraille)
+    
+    loop Por cada carácter Braille
+        I->>I: brailleCharToMask(char)
+        alt Es signo de número (3456)
+            I->>I: activar modoNumero
+        else Es signo de mayúscula (46)
+            I->>I: activar siguienteMayuscula
+        else Es doble mayúscula (46+46)
+            I->>I: activar mayusculaPalabra
+        else Es espacio (U+2800)
+            I->>I: desactivar modos
+        else Es carácter normal
+            I->>M: buscar en mapaInverso(mascara)
+            M-->>I: carácter español
+            alt modoNumero activo
+                I->>I: interpretar como dígito
+            else siguienteMayuscula activo
+                I->>I: convertir a mayúscula
             end
         end
     end
-
-    T-->>C: texto en español
-    C-->>U: vista resultado con texto español
+    
+    I-->>C: texto español completo
+    C-->>V: resultado
+    V-->>U: muestra texto español
 ```
-
----
-
-### Mapeo Diseño Prototipo → Implementación
-
-| Clase Prototipo (Diseño) | Clase Implementada (Código) | Paquete |
-|--------------------------|----------------------------|---------|
-| AplicacionPrincipal | ProyectoConstruccionApplication | ec.epn.edu.proyectoconstruccion |
-| ControladorTraduccion | TranscriptionController | ec.epn.edu.proyectoconstruccion.controller |
-| TraductorTexto | BrailleMapper | ec.epn.edu.proyectoconstruccion.service |
-| DiccionarioBraille | BrailleDictionary | ec.epn.edu.proyectoconstruccion.service |
-| ConvertidorInverso | EspañolMapper | ec.epn.edu.proyectoconstruccion.service |
 
 ---
 
 ### Patrones de Diseño Identificados
 
-| Patrón | Aplicación |
-|--------|------------|
-| **MVC (Model-View-Controller)** | Spring Boot separa el controlador (ControladorTraduccion), la lógica de negocio (TraductorTexto/DiccionarioBraille) y las vistas (templates Thymeleaf) |
-| **Diccionario / Lookup Table** | DiccionarioBraille centraliza todas las correspondencias carácter↔Braille en mapas HashMap |
-| **Strategy** | El controlador delega la conversión al TraductorTexto, que decide la estrategia (directo, inverso o espejo) según el endpoint |
-| **Inmutabilidad** | DiccionarioBraille expone mapas de solo lectura (`Collections.unmodifiableMap`) |
+| Patrón | Aplicación en el Diseño |
+|--------|------------------------|
+| **MVC** (Model-View-Controller) | `ConversionController` (Controller) + `ConversionView` (View) + Services (Model) |
+| **Strategy** | Cada `*MapService` implementa una estrategia de conversión para un tipo de carácter |
+| **Facade** | `BrailleConverterService` actúa como fachada, ocultando la complejidad de los sub-servicios |
+| **Singleton / Data** | `BrailleCharacterMap` como repositorio central de mapeos, consultado por todos los servicios |
+| **Template Method** | El flujo de conversión sigue: iterar → clasificar → delegar → ensamblar |
