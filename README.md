@@ -7,7 +7,18 @@ Aplicación web desarrollada con **Spring Boot** que permite la traducción bidi
 - **Repositorio del código fuente:** [Spanish-Braille-Application (ITERACION-2)](https://github.com/MRGonorrea79/Spanish-Braille-Application/tree/ITERACION-2)
 - **Metodología:** XP (Extreme Programming)
 - **Herramienta de gestión:** GitHub
-- **Materia:** Metodologías Ágiles
+- **Materia:** Construcción y Evolución de Software — Primer Bimestre
+
+---
+
+## Fases XP del Proyecto
+
+| Fase | Artefactos | Responsable |
+|------|-----------|-------------|
+| **I. Planificación** | Historias de Usuario V2, Release Plan, Sprint Plan, Velocidad del Proyecto | Planning |
+| **II. Diseño** | Tarjetas CRC, Diagrama de Casos de Uso, Diagrama de Clases, Roadmap Braille | Diseño (Elian) |
+| **III. Desarrollo** | Código fuente (ITERACION-2), Programación por parejas, Integración | Codificación |
+| **IV. Pruebas** | Pruebas unitarias, Pruebas de aceptación | Testing |
 
 ---
 
@@ -16,7 +27,7 @@ Aplicación web desarrollada con **Spring Boot** que permite la traducción bidi
 | Rol XP | Integrante | Responsabilidad |
 |--------|-----------|-----------------|
 | **Cliente / Planning** | *(Pendiente de completar)* | Definir historias de usuario, priorizar el backlog y participar en las pruebas de aceptación |
-| **Programador — Diseño** | **Elian Caizapanta** | Crear los artefactos de diseño: diagramas de casos de uso, diagramas de clases y roadmap del sistema |
+| **Programador — Diseño** | **Elian Caizapanta** | Crear los artefactos de diseño: tarjetas CRC, diagramas de casos de uso, diagramas de clases y roadmap |
 | **Programador — Codificación** | *(Pendiente de completar)* | Implementar y modificar el código fuente según las historias de usuario |
 | **Programador — Codificación** | *(Pendiente de completar)* | Implementar y modificar el código fuente según las historias de usuario |
 | **Tester** | *(Pendiente de completar)* | Diseñar y ejecutar pruebas unitarias y de aceptación |
@@ -28,37 +39,40 @@ Aplicación web desarrollada con **Spring Boot** que permite la traducción bidi
 
 ### Elian Caizapanta — Programador (Diseño)
 
-**Rol XP:** Programador encargado del diseño de la arquitectura y modelado del sistema.
+**Rol XP:** Programador encargado del diseño de la arquitectura y modelado del sistema (Fase II — Diseño XP).
 
 **Artefactos entregados:**
 
-#### 1. Diagrama de Casos de Uso
+#### 1. Tarjetas CRC
+- **Archivo:** [`docs/design/tarjetas-crc.md`](docs/design/tarjetas-crc.md)
+- 12 Tarjetas CRC (Clase · Responsabilidades · Colaboradores) derivadas de los Casos de Uso CU-01 a CU-10
+- Clases identificadas: ConversionController, BrailleConverterService, AlphabetMapService, AccentMapService, NumberMapService, UpperCaseHandlerService, PunctuationMapService, BrailleRendererService, SignaleticsService, InverseBrailleService, BrailleCharacterMap, ConversionView
+- Mapeo de cada tarjeta CRC a su implementación real en el código existente (ITERACION-2)
+
+#### 2. Diagrama de Casos de Uso
 - **Archivo:** [`docs/design/diagrama-casos-de-uso.md`](docs/design/diagrama-casos-de-uso.md)
-- 10 Casos de Uso (CU-01 a CU-10) derivados de las 10 Historias de Usuario (01H1–10H10)
-- Diagrama general en Mermaid con relaciones `<<incluye>>` entre casos de uso
-- Descripción detallada de cada CU: actor, precondición, flujo principal, postcondición y prioridad
-- Matriz de trazabilidad que relaciona cada Historia de Usuario con su Caso de Uso correspondiente y sprint asignado
+- 8 Casos de Uso (CU-01 a CU-08) derivados de las 7 Historias de Usuario V2
+- Diagrama general en Mermaid con relaciones `<<incluye>>` y `<<extiende>>`
+- Descripción detallada de cada CU: actor, precondiciones, flujo principal, flujos alternativos, postcondiciones y excepciones
+- Matriz de trazabilidad HU V2 ↔ Casos de Uso por sprint
 
-#### 2. Diagrama de Clases
+#### 3. Diagrama de Clases
 - **Archivo:** [`docs/design/diagrama-de-clases.md`](docs/design/diagrama-de-clases.md)
-- 5 clases con **nombres prototipo** (diseño conceptual previo a la implementación):
-  - `AplicacionPrincipal` → Punto de entrada Spring Boot
-  - `ControladorTraduccion` → Controlador web (endpoints HTTP)
-  - `TraductorTexto` → Servicio central de traducción bidireccional
-  - `DiccionarioBraille` → Almacén de mapas de correspondencia carácter↔Braille
-  - `ConvertidorInverso` → Servicio especializado Braille→Español
-- 2 Diagramas de Secuencia: flujo Español→Braille y flujo Braille→Español
-- Tabla de mapeo Diseño Prototipo → Implementación real
-- Patrones de diseño identificados: MVC, Diccionario/Lookup Table, Strategy, Inmutabilidad
+- 12 clases derivadas de las Tarjetas CRC con atributos y métodos
+- Diagrama de clases en Mermaid con relaciones de dependencia y delegación
+- 2 Diagramas de Secuencia: flujo Español→Braille y flujo Braille→Español (inverso)
+- Tabla de mapeo Diseño CRC → Implementación real en el código
+- Patrones de diseño identificados: MVC, Strategy, Facade, Singleton/Data, Template Method
 
-#### 3. Roadmap del Alfabeto Braille Español
+#### 4. Roadmap del Alfabeto Braille Español
 - **Archivo:** [`docs/design/roadmap-alfabeto-braille.md`](docs/design/roadmap-alfabeto-braille.md)
 - Estructura de la celda Braille (6 puntos) y fórmula Unicode
 - Tablas completas: letras (1ra, 2da, 3ra serie), caracteres especiales (ñ, ü), vocales acentuadas
 - Números (0–9) con signo numérico, signos de puntuación y signos de control
 - Explicación del Braille espejo (reflexión horizontal de puntos)
-- Diagrama Gantt por Sprint 1 y Sprint 2
-- Ejemplos de transcripción: "Hola Mundo 123", "café", "ECUADOR"
+- Diagramas Gantt por Sprint 1 y Sprint 2
+- Velocidad del proyecto: 27 pts totales, 3.4 pts/sem promedio
+- Ejemplo de transcripción paso a paso
 
 ---
 
@@ -69,8 +83,9 @@ Aplicación web desarrollada con **Spring Boot** que permite la traducción bidi
 **Artefactos entregados:**
 
 > *Pendiente de completar. Agregar aquí:*
-> - Historias de Usuario con prioridad y criterios de aceptación
-> - Release Planning (planificación de sprints)
+> - Historias de Usuario V2 (7 HU: 01H1–07H7)
+> - Release Planning y Sprint Planning
+> - Velocidad del Proyecto
 > - Evidencia de reuniones de planificación
 
 ---
@@ -136,45 +151,44 @@ Proyecto-Agile/
 ├── README.md                              ← Este archivo
 ├── docs/
 │   └── design/                            ← Artefactos de Diseño (Elian)
-│       ├── diagrama-casos-de-uso.md       ← 10 CU con flujos detallados
-│       ├── diagrama-de-clases.md          ← Clases prototipo + secuencia
+│       ├── tarjetas-crc.md                ← 12 Tarjetas CRC
+│       ├── diagrama-casos-de-uso.md       ← 8 CU con flujos detallados
+│       ├── diagrama-de-clases.md          ← 12 clases + secuencia
 │       └── roadmap-alfabeto-braille.md    ← Alfabeto Braille + Gantt
-├── src/                                   ← Código fuente (Spring Boot)
-│   ├── main/
-│   └── test/
-└── pom.xml                                ← Configuración Maven
 ```
 
 ---
 
-## Historias de Usuario
+## Historias de Usuario (V2)
 
-| ID | Historia de Usuario | Prioridad | Sprint |
-|----|---------------------|-----------|--------|
-| 01H1 | Como usuario necesito ingresar texto en español para convertirlo a Braille | Alta | 1 |
-| 02H2 | Como usuario necesito que el sistema transcriba correctamente las letras (a–z) al Braille | Alta | 1 |
-| 03H3 | Como usuario necesito que convierta vocales acentuadas (á,é,í,ó,ú) y ñ al Braille | Alta | 1 |
-| 04H4 | Como usuario necesito que transcriba números (0–9) con signo de número Braille | Media | 1 |
-| 05H5 | Como usuario necesito que identifique mayúsculas y anteponga el indicador Braille | Media | 1 |
-| 06H6 | Como usuario necesito que convierta signos de puntuación básicos al Braille | Media | 2 |
-| 07H7 | Como usuario necesito ver la representación gráfica de los cuadratines Braille | Media | 2 |
-| 08H8 | Como usuario necesito generar señalética Braille espejo para impresión | Alta | 2 |
-| 09H9 | Como usuario necesito transcribir Braille de vuelta a español (bidireccional) | Baja | 2 |
-| 10H10 | Como usuario necesito limpiar los campos de entrada/salida con un botón de reset | Baja | 2 |
+| ID | Historia de Usuario | Estimación | Importancia | Sprint |
+|----|---------------------|-----------|-------------|--------|
+| 01H1 | Transcribir abecedario (a–z) a Braille (series 1, 2 y 3) | 5 pts | Alta | 1 |
+| 02H2 | Convertir vocales acentuadas (á,é,í,ó,ú) y ñ a Braille | 3 pts | Media | 1 |
+| 03H3 | Transcribir números (0–9) con signo de número Braille (3456) | 2 pts | Alta | 1 |
+| 04H4 | Manejar letras mayúsculas con indicador Braille (puntos 46) | 2 pts | Media | 1 |
+| 05H5 | Convertir signos de puntuación básicos (.,;¿?¡!) a Braille | 3 pts | Media | 2 |
+| 06H6 | Generar señalética Braille imprimible (exportable PNG/PDF) | 7 pts | Alta | 2 |
+| 07H7 | Transcribir patrón Braille a español (bidireccional) | 5 pts | Alta | 2 |
 
 ---
 
 ## Planificación de Sprints
 
-### Sprint 1 — Transcripción Base
-- **Duración:** 1 semana
-- **Historias:** 01H1, 02H2, 03H3, 04H4, 05H5
-- **Objetivo:** Implementar la conversión Español→Braille con soporte para letras, acentos, números y mayúsculas
+### Sprint 1 — Transcripción Base (12 pts · 4 semanas)
+- **HUs:** 01H1 (5 pts), 02H2 (3 pts), 03H3 (2 pts), 04H4 (2 pts)
+- **Objetivo:** Implementar la conversión completa de texto español a Braille incluyendo abecedario, vocales acentuadas, números y mayúsculas
+- **Velocidad:** 3.0 pts/sem · 24 h estimadas · 96 h disponibles
 
-### Sprint 2 — Funcionalidades Avanzadas
-- **Duración:** 1 semana
-- **Historias:** 06H6, 07H7, 08H8, 09H9, 10H10
-- **Objetivo:** Agregar puntuación, visualización gráfica, modo espejo, conversión inversa y botón de limpieza
+### Sprint 2 — Funcionalidades Avanzadas (15 pts · 4 semanas)
+- **HUs:** 05H5 (3 pts), 06H6 (7 pts), 07H7 (5 pts)
+- **Objetivo:** Agregar puntuación, generación de señalética imprimible y transcripción inversa Braille→español
+- **Velocidad:** 3.8 pts/sem · 28 h estimadas · 96 h disponibles
+
+### Velocidad Total del Release
+- **Story Points totales:** 27 pts
+- **Velocidad promedio:** 3.4 pts/sem
+- **Calibración:** 1.9 h/pt
 
 ---
 
