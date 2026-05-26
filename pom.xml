@@ -12,10 +12,10 @@
     </parent>
 
     <groupId>ec.epn.edu</groupId>
-    <artifactId>Proyecto-construccion</artifactId>
+    <artifactId>SpanishBrailleApp</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>Proyecto-construccion</name>
-    <description>Proyecto-construccion</description>
+    <name>SpanishBrailleApp</name>
+    <description>SpanishBrailleApp</description>
 
     <properties>
         <java.version>25</java.version>

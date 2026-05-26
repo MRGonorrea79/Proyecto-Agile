@@ -1,4 +1,4 @@
-package ec.epn.edu.proyectoconstruccion.service;
+package ec.epn.edu.spanishBrailleApp.service;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
