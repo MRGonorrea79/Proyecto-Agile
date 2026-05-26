@@ -1,10 +1,26 @@
 # Diagrama de Casos de Uso
 
-## Transcriptor Braille Español
+## Spanish Braille Application
 
-**Proyecto:** Spanish Braille Application  
-**Rol:** Diseño (Elian Caizapanta)  
-**Iteración:** 2  
+**Fase XP:** II. Diseño  
+**Rol:** Programador — Diseño (Elian Caizapanta)  
+**Basado en:** Historias de Usuario V2 (01H1–07H7) y código existente (ITERACION-2)  
+
+---
+
+### Historias de Usuario V2 — Referencia
+
+| ID | Historia de Usuario | Estimación | Sprint |
+|----|---------------------|-----------|--------|
+| 01H1 | Transcribir abecedario (a–z) a Braille | 5 pts | 1 |
+| 02H2 | Convertir vocales acentuadas y ñ a Braille | 3 pts | 1 |
+| 03H3 | Transcribir números (0–9) con signo de número Braille | 2 pts | 1 |
+| 04H4 | Manejar letras mayúsculas con indicador Braille | 2 pts | 1 |
+| 05H5 | Convertir signos de puntuación básicos a Braille | 3 pts | 2 |
+| 06H6 | Generar señalética Braille imprimible | 7 pts | 2 |
+| 07H7 | Transcribir patrón Braille a español (bidireccional) | 5 pts | 2 |
+
+> Sprint 1 = 12 pts · Sprint 2 = 15 pts · Total Release = 27 pts
 
 ---
 
@@ -13,16 +29,14 @@
 ```mermaid
 graph LR
     subgraph Sistema["Sistema Transcriptor Braille"]
-        CU1["CU-01<br/>Ingresar texto en español<br/>y convertir a Braille"]
-        CU2["CU-02<br/>Transcribir letras<br/>del abecedario a-z"]
+        CU1["CU-01<br/>Ingresar texto español<br/>para conversión a Braille"]
+        CU2["CU-02<br/>Transcribir abecedario<br/>a-z a Braille"]
         CU3["CU-03<br/>Convertir vocales<br/>acentuadas y ñ"]
-        CU4["CU-04<br/>Transcribir números<br/>con signo numérico"]
-        CU5["CU-05<br/>Manejar indicador<br/>de mayúsculas"]
+        CU4["CU-04<br/>Transcribir números<br/>al sistema Braille"]
+        CU5["CU-05<br/>Manejar letras<br/>mayúsculas"]
         CU6["CU-06<br/>Convertir signos<br/>de puntuación"]
-        CU7["CU-07<br/>Visualizar representación<br/>gráfica Braille"]
-        CU8["CU-08<br/>Generar señalética<br/>Braille espejo"]
-        CU9["CU-09<br/>Transcribir Braille<br/>a español"]
-        CU10["CU-10<br/>Limpiar campos<br/>de entrada/salida"]
+        CU7["CU-07<br/>Generar señalética<br/>Braille imprimible"]
+        CU8["CU-08<br/>Transcribir Braille<br/>a español (inverso)"]
     end
 
     Usuario(("👤 Usuario"))
@@ -30,163 +44,169 @@ graph LR
     Usuario --- CU1
     Usuario --- CU7
     Usuario --- CU8
-    Usuario --- CU9
-    Usuario --- CU10
 
-    CU1 -.->|incluye| CU2
-    CU1 -.->|incluye| CU3
-    CU1 -.->|incluye| CU4
-    CU1 -.->|incluye| CU5
-    CU1 -.->|incluye| CU6
+    CU1 -.->|«incluye»| CU2
+    CU1 -.->|«incluye»| CU3
+    CU1 -.->|«incluye»| CU4
+    CU1 -.->|«incluye»| CU5
+    CU1 -.->|«incluye»| CU6
+    CU2 -.->|«extiende»| CU5
 ```
 
 ---
 
-### Descripción Detallada de Casos de Uso
+### SPRINT 1
 
-#### CU-01: Ingresar texto en español y convertir a Braille
+---
+
+#### CU-01 — Ingresar texto en español para conversión a Braille
 
 | Campo | Descripción |
 |-------|-------------|
 | **ID** | CU-01 |
-| **HU Relacionada** | 01H1 |
-| **Actor** | Usuario |
-| **Precondición** | El usuario accede a la página principal del transcriptor |
-| **Descripción** | El usuario ingresa texto en español (letras, números, acentos, signos) y el sistema lo convierte a su representación Braille Unicode |
-| **Flujo Principal** | 1. El usuario accede a la interfaz web<br/>2. Ingresa texto en el campo de entrada<br/>3. Presiona el botón "Transcribir"<br/>4. El sistema normaliza los espacios del texto<br/>5. El sistema procesa cada carácter según su tipo<br/>6. Se muestra el resultado en Braille Unicode |
-| **Postcondición** | Se muestra la transcripción Braille en pantalla |
-| **Prioridad** | Alta |
+| **HU V2** | 01H1 — Transcribir abecedario (a–z) a Braille |
+| **Actor(es)** | Usuario |
+| **Descripción** | El usuario escribe o pega un texto en español en el campo de entrada de la aplicación web y solicita su conversión al sistema Braille. |
+| **Precondiciones** | La aplicación web está desplegada y accesible. El usuario tiene acceso a un navegador web. |
+| **Flujo Principal** | 1. El usuario accede a la interfaz principal de la aplicación.<br/>2. El sistema muestra el campo de entrada de texto y el botón "Convertir".<br/>3. El usuario escribe o pega un texto en español en el campo de entrada.<br/>4. El usuario hace clic en el botón "Convertir".<br/>5. El sistema valida que el campo de entrada no esté vacío.<br/>6. El sistema procesa el texto y genera la representación Braille.<br/>7. El sistema muestra el resultado Braille en el área de salida. |
+| **Flujos Alternativos** | A-01: Si el texto contiene caracteres no soportados, el sistema los omite e informa al usuario con un mensaje de advertencia. |
+| **Postcondiciones** | El texto en español ha sido convertido y su equivalente Braille se muestra en la interfaz. |
+| **Excepciones** | E-01: El campo de entrada está vacío: el sistema muestra el mensaje "Por favor ingresa un texto para convertir". |
+| **Código** | `TranscriptionController.java` → endpoint `POST /transcribir-Español` |
 
-#### CU-02: Transcribir letras del abecedario (a-z)
+---
+
+#### CU-02 — Transcribir abecedario español (a–z) a Braille
 
 | Campo | Descripción |
 |-------|-------------|
 | **ID** | CU-02 |
-| **HU Relacionada** | 02H2 |
-| **Actor** | Sistema (incluido en CU-01) |
-| **Precondición** | Se recibe un carácter alfabético en minúscula |
-| **Descripción** | El sistema busca la letra en el diccionario de mapeo Braille y retorna su máscara de puntos correspondiente convertida a Unicode |
-| **Flujo Principal** | 1. Se recibe la letra<br/>2. Se busca en el mapa de correspondencias<br/>3. Se convierte la máscara de bits a carácter Unicode (U+2800 + máscara)<br/>4. Se retorna el carácter Braille |
-| **Postcondición** | La letra tiene su equivalente Braille |
-| **Prioridad** | Alta |
+| **HU V2** | 01H1 — Transcribir abecedario (a–z) a Braille |
+| **Actor(es)** | Usuario / Sistema |
+| **Descripción** | El sistema convierte internamente cada letra del abecedario español (a–z, incluyendo las tres series Braille) al cuadratín Braille correspondiente. |
+| **Precondiciones** | El texto de entrada ha sido recibido por el sistema tras el CU-01. |
+| **Flujo Principal** | 1. El sistema itera carácter a carácter sobre el texto recibido.<br/>2. Para cada letra, el sistema consulta el mapa de caracteres (series 1, 2 y 3 del Braille español).<br/>3. El sistema obtiene el patrón de puntos Braille correspondiente a la letra.<br/>4. El sistema agrega el cuadratín resultante a la cadena de salida.<br/>5. Al finalizar, retorna la cadena Braille completa para su visualización. |
+| **Flujos Alternativos** | A-01: Si la letra es mayúscula, el sistema delega el manejo al CU-05 antes de continuar con la conversión. |
+| **Postcondiciones** | Cada letra del texto ha sido mapeada a su cuadratín Braille correcto. |
+| **Excepciones** | E-01: Letra no encontrada en el mapa: el sistema registra una advertencia y omite el carácter. |
+| **Código** | `BrailleDictionary.java` → `initLetters()` · `BrailleMapper.java` → `españolABraille()` |
 
-#### CU-03: Convertir vocales acentuadas y ñ
+---
+
+#### CU-03 — Convertir vocales acentuadas y ñ a Braille
 
 | Campo | Descripción |
 |-------|-------------|
 | **ID** | CU-03 |
-| **HU Relacionada** | 03H3 |
-| **Actor** | Sistema (incluido en CU-01) |
-| **Precondición** | Se recibe un carácter con tilde o la letra ñ |
-| **Descripción** | El sistema mapea las vocales acentuadas (á, é, í, ó, ú) y caracteres especiales (ñ, ü) a sus representaciones Braille específicas del español |
-| **Flujo Principal** | 1. Se detecta vocal acentuada o ñ/ü<br/>2. Se busca en el mapa de acentos<br/>3. Se retorna el patrón Braille específico |
-| **Postcondición** | El carácter especial tiene su equivalente Braille correcto |
-| **Prioridad** | Alta |
+| **HU V2** | 02H2 — Convertir vocales acentuadas y ñ a Braille |
+| **Actor(es)** | Usuario / Sistema |
+| **Descripción** | El sistema convierte las vocales con tilde (á, é, í, ó, ú) y la ñ al cuadratín Braille definido en la tabla de letras adicionales. |
+| **Precondiciones** | El texto contiene al menos una vocal acentuada o el carácter ñ. |
+| **Flujo Principal** | 1. El sistema detecta un carácter del conjunto {á, é, í, ó, ú, ñ, ü}.<br/>2. El sistema consulta la tabla de letras adicionales del cuadro de resumen Braille español.<br/>3. El sistema obtiene el patrón de puntos correspondiente.<br/>4. El sistema inserta el cuadratín en la posición correcta de la cadena de salida. |
+| **Flujos Alternativos** | A-01: Si el carácter es "ü", el sistema lo convierte usando el patrón 1256 según la tabla de letras adicionales. |
+| **Postcondiciones** | Todos los caracteres especiales del español están representados correctamente en la salida Braille. |
+| **Excepciones** | E-01: Carácter acentuado sin mapeo definido: el sistema lo omite y registra la advertencia en el log. |
+| **Código** | `BrailleDictionary.java` → `initAccents()` |
 
-#### CU-04: Transcribir números con signo numérico
+---
+
+#### CU-04 — Transcribir números al sistema Braille
 
 | Campo | Descripción |
 |-------|-------------|
 | **ID** | CU-04 |
-| **HU Relacionada** | 04H4 |
-| **Actor** | Sistema (incluido en CU-01) |
-| **Precondición** | Se detecta una secuencia numérica en el texto |
-| **Descripción** | El sistema antepone el signo de número Braille (puntos 3,4,5,6) antes de la primera cifra de cada secuencia numérica y reutiliza las posiciones de las letras a-j para representar 1-0 |
-| **Flujo Principal** | 1. Se detecta que la palabra contiene dígitos<br/>2. Se antepone el signo de número (⠼)<br/>3. Cada dígito se mapea a la letra correspondiente (1→a, 2→b, ... 0→j)<br/>4. Al encontrar un carácter no numérico se finaliza el modo número |
-| **Postcondición** | La secuencia numérica se representa correctamente en Braille |
-| **Prioridad** | Media |
+| **HU V2** | 03H3 — Transcribir números (0–9) con signo de número Braille |
+| **Actor(es)** | Usuario / Sistema |
+| **Descripción** | El sistema detecta secuencias numéricas en el texto, antepone el signo de número Braille (puntos 3456) una sola vez y convierte cada dígito usando la primera serie del Braille español. |
+| **Precondiciones** | El texto de entrada contiene al menos un dígito (0–9). |
+| **Flujo Principal** | 1. El sistema detecta que el carácter actual es un dígito.<br/>2. Si no se ha activado el modo numérico, el sistema inserta el signo de número Braille (puntos 3456).<br/>3. El sistema convierte el dígito usando la equivalencia de la primera serie Braille (1→a, 2→b, ..., 0→j).<br/>4. El sistema continúa en modo numérico hasta encontrar un carácter no numérico.<br/>5. Al encontrar un carácter no numérico, desactiva el modo numérico. |
+| **Flujos Alternativos** | A-01: Secuencia multi-cifra (ej. "123"): el signo de número se inserta solo una vez al inicio de la secuencia. |
+| **Postcondiciones** | Cada número del texto está precedido por el signo de número Braille y mapeado correctamente. |
+| **Excepciones** | E-01: El número contiene caracteres inválidos: el sistema trunca la secuencia en el primer carácter inválido. |
+| **Código** | `BrailleDictionary.java` → `initNumbers()` · `SIGNO_NUMERO = mask(3,4,5,6)` |
 
-#### CU-05: Manejar indicador de mayúsculas
+---
+
+#### CU-05 — Manejar letras mayúsculas con indicador Braille
 
 | Campo | Descripción |
 |-------|-------------|
 | **ID** | CU-05 |
-| **HU Relacionada** | 05H5 |
-| **Actor** | Sistema (incluido en CU-01) |
-| **Precondición** | Se detecta una letra mayúscula o una palabra completa en mayúsculas |
-| **Descripción** | El sistema antepone el indicador de mayúscula Braille (puntos 4,6). Para palabras completas en mayúsculas, se duplica el indicador al inicio de la palabra |
-| **Flujo Principal** | 1. Se verifica si la palabra completa está en mayúsculas<br/>2a. Si es palabra completa: se anteponen dos signos de mayúscula (⠠⠠)<br/>2b. Si es letra individual: se antepone un signo de mayúscula (⠠)<br/>3. La letra se convierte a minúscula para buscar su mapeo |
-| **Postcondición** | Las mayúsculas se representan correctamente en Braille |
-| **Prioridad** | Media |
+| **HU V2** | 04H4 — Manejar letras mayúsculas con indicador Braille (puntos 46) |
+| **Actor(es)** | Sistema |
+| **Descripción** | El sistema detecta letras mayúsculas en el texto de entrada y antepone el cuadratín indicador de mayúscula (puntos 46) antes de la letra correspondiente. |
+| **Precondiciones** | El texto de entrada contiene al menos una letra mayúscula. |
+| **Flujo Principal** | 1. El sistema detecta que el carácter actual es una letra mayúscula.<br/>2. El sistema inserta el cuadratín indicador de mayúscula (puntos 46) en la cadena de salida.<br/>3. El sistema convierte la letra a su equivalente minúscula para consultar el mapa Braille.<br/>4. El sistema inserta el cuadratín de la letra correspondiente.<br/>5. El sistema continúa con el siguiente carácter. |
+| **Flujos Alternativos** | A-01: Palabra completa en mayúsculas: el sistema inserta doble indicador de mayúscula (puntos 46 + 46) antes de la palabra. |
+| **Postcondiciones** | Cada letra mayúscula en el texto está precedida por el indicador de mayúscula Braille en la salida. |
+| **Excepciones** | E-01: Carácter mayúsculo sin equivalente minúsculo en el mapa: el sistema lo omite y registra la advertencia. |
+| **Código** | `BrailleMapper.java` → `SIGNO_MAYUSCULA = mask(4,6)` · lógica en `españolABraille()` |
 
-#### CU-06: Convertir signos de puntuación
+---
+
+### SPRINT 2
+
+---
+
+#### CU-06 — Convertir signos de puntuación a Braille
 
 | Campo | Descripción |
 |-------|-------------|
 | **ID** | CU-06 |
-| **HU Relacionada** | 06H6 |
-| **Actor** | Sistema (incluido en CU-01) |
-| **Precondición** | Se recibe un signo de puntuación |
-| **Descripción** | El sistema convierte signos de puntuación básicos (. , ; : ? ! - ( ) + * =) a sus equivalentes Braille |
-| **Flujo Principal** | 1. Se detecta signo de puntuación<br/>2. Se busca en el mapa de puntuación<br/>3. Se retorna la máscara Braille correspondiente |
-| **Postcondición** | El signo de puntuación tiene su equivalente Braille |
-| **Prioridad** | Media |
+| **HU V2** | 05H5 — Convertir signos de puntuación básicos a Braille |
+| **Actor(es)** | Usuario / Sistema |
+| **Descripción** | El sistema convierte los signos de puntuación básicos del español (punto, coma, punto y coma, signos de interrogación y exclamación de apertura y cierre) al cuadratín Braille correspondiente. |
+| **Precondiciones** | El texto de entrada contiene al menos un signo de puntuación soportado. |
+| **Flujo Principal** | 1. El sistema detecta un signo de puntuación en el texto.<br/>2. El sistema consulta la sección de signos del cuadro de resumen Braille español.<br/>3. El sistema obtiene el patrón de puntos del signo.<br/>4. El sistema inserta el cuadratín en la posición correcta de la cadena de salida. |
+| **Flujos Alternativos** | A-01: Signo no soportado (ej. @, #): el sistema lo omite e indica al usuario con un mensaje de advertencia. |
+| **Postcondiciones** | Todos los signos de puntuación soportados están representados en la salida Braille. |
+| **Excepciones** | E-01: Signo sin mapeo en la tabla: el sistema lo omite y continúa con el siguiente carácter. |
+| **Código** | `BrailleDictionary.java` → `initPunctuation()` |
 
-#### CU-07: Visualizar representación gráfica Braille
+---
+
+#### CU-07 — Generar señalética Braille imprimible
 
 | Campo | Descripción |
 |-------|-------------|
 | **ID** | CU-07 |
-| **HU Relacionada** | 07H7 |
-| **Actor** | Usuario |
-| **Precondición** | El usuario ha ingresado texto |
-| **Descripción** | El sistema muestra en pantalla la representación Unicode de los cuadratines Braille permitiendo una verificación visual del resultado |
-| **Flujo Principal** | 1. El usuario ingresa texto libre<br/>2. El sistema procesa y convierte a Braille<br/>3. Se muestra en la vista de resultados con los caracteres Unicode Braille renderizados |
-| **Postcondición** | El usuario puede ver gráficamente los cuadratines Braille |
-| **Prioridad** | Media |
+| **HU V2** | 06H6 — Generar señalética Braille imprimible (exportable PNG/PDF) |
+| **Actor(es)** | Usuario |
+| **Descripción** | El usuario ingresa el texto de una señal (ej. "Salida de emergencia") y el sistema genera una plantilla de señalética con el texto en tinta y su equivalente Braille, lista para imprimir o exportar. |
+| **Precondiciones** | El sistema puede convertir texto a Braille (CU-01 al CU-06 funcionales). El usuario ha ingresado el texto de la señal. |
+| **Flujo Principal** | 1. El usuario escribe el texto de la señal en el campo correspondiente.<br/>2. El usuario hace clic en "Generar Señalética".<br/>3. El sistema convierte el texto a Braille usando el motor de conversión.<br/>4. El sistema aplica la plantilla de señalética: texto en tinta en la parte superior y cuadratines Braille en la inferior.<br/>5. El sistema renderiza la vista previa de la señalética en la interfaz.<br/>6. El usuario hace clic en "Exportar" para descargar la señalética.<br/>7. El sistema genera el archivo (PNG o PDF) y lo descarga en el navegador del usuario. |
+| **Flujos Alternativos** | A-01: El usuario elige formato PNG: el sistema genera una imagen de alta resolución (300 dpi).<br/>A-02: El usuario elige formato PDF: el sistema genera un PDF de una página con dimensiones de señalética estándar. |
+| **Postcondiciones** | El usuario dispone de un archivo de señalética listo para imprimir con texto en tinta y Braille. |
+| **Excepciones** | E-01: Error al generar el archivo de exportación: el sistema muestra "No se pudo generar el archivo. Intente de nuevo".<br/>E-02: El texto de la señal supera el largo máximo permitido: el sistema alerta al usuario y limita la entrada. |
+| **Código** | *Pendiente de implementación — Sprint 2* |
 
-#### CU-08: Generar señalética Braille espejo
+---
+
+#### CU-08 — Transcribir patrón Braille a carácter español (inverso)
 
 | Campo | Descripción |
 |-------|-------------|
 | **ID** | CU-08 |
-| **HU Relacionada** | 08H8 |
-| **Actor** | Usuario |
-| **Precondición** | El usuario accede a la función de espejo |
-| **Descripción** | El sistema genera la representación Braille invertida horizontalmente (espejo) del texto en español, para facilitar la escritura manual o impresión en relieve. Los puntos se reflejan (1↔4, 2↔5, 3↔6) y la cadena resultante se invierte |
-| **Flujo Principal** | 1. El usuario ingresa texto en español<br/>2. Presiona el botón para modo espejo<br/>3. El sistema usa el mapa espejo (pam) para convertir<br/>4. Se invierte la cadena completa resultante<br/>5. Se muestra el resultado en la vista de espejo |
-| **Postcondición** | Se muestra el Braille espejo listo para imprimir o escribir a mano |
-| **Prioridad** | Alta |
-
-#### CU-09: Transcribir Braille a español
-
-| Campo | Descripción |
-|-------|-------------|
-| **ID** | CU-09 |
-| **HU Relacionada** | 09H9 |
-| **Actor** | Usuario |
-| **Precondición** | El usuario tiene texto en Braille Unicode |
-| **Descripción** | El sistema convierte texto en Braille Unicode de vuelta a español, interpretando signos de número, indicadores de mayúscula y caracteres especiales |
-| **Flujo Principal** | 1. El usuario ingresa texto Braille Unicode<br/>2. Presiona "Transcribir" en el formulario Braille<br/>3. El sistema recorre cada carácter Braille<br/>4. Detecta y maneja signos de control (número, mayúscula)<br/>5. Busca cada máscara en el mapa inverso<br/>6. Construye el texto en español |
-| **Postcondición** | Se muestra el texto en español equivalente al Braille ingresado |
-| **Prioridad** | Baja |
-
-#### CU-10: Limpiar campos de entrada/salida
-
-| Campo | Descripción |
-|-------|-------------|
-| **ID** | CU-10 |
-| **HU Relacionada** | 10H10 |
-| **Actor** | Usuario |
-| **Precondición** | Hay texto en los campos de entrada o salida |
-| **Descripción** | El usuario puede volver a la página principal para iniciar una nueva transcripción limpia sin necesidad de recargar manualmente |
-| **Flujo Principal** | 1. El usuario presiona el enlace para volver al inicio<br/>2. Se carga la página principal con campos vacíos |
-| **Postcondición** | Los campos de entrada y salida están vacíos |
-| **Prioridad** | Baja |
+| **HU V2** | 07H7 — Transcribir patrón Braille a español (bidireccional) |
+| **Actor(es)** | Usuario |
+| **Descripción** | El usuario selecciona o ingresa un patrón de puntos Braille (indicando cuáles de los 6 puntos están activos) y el sistema devuelve el carácter español correspondiente. |
+| **Precondiciones** | El mapa de caracteres Braille ↔ español está disponible en el sistema. |
+| **Flujo Principal** | 1. El usuario accede a la sección de conversión inversa en la interfaz.<br/>2. El usuario ingresa texto en Braille Unicode.<br/>3. El usuario hace clic en "Convertir".<br/>4. El sistema construye la máscara de bits de cada carácter Braille.<br/>5. El sistema busca la máscara en el mapa inverso Braille → español.<br/>6. El sistema muestra el texto español correspondiente. |
+| **Flujos Alternativos** | A-01: El usuario ingresa el patrón como texto numérico (ej. "1-2-5"): el sistema lo interpreta y busca el carácter correspondiente. |
+| **Postcondiciones** | El usuario conoce el texto en español que corresponde al patrón Braille ingresado. |
+| **Excepciones** | E-01: El patrón no corresponde a ningún carácter definido: el sistema muestra "Patrón no reconocido en el Braille español". |
+| **Código** | `BrailleMapper.java` → `brailleAEspañol()` · `EspañolMapper.java` |
 
 ---
 
-### Matriz de Trazabilidad HU ↔ Casos de Uso
+### Matriz de Trazabilidad HU V2 ↔ Casos de Uso ↔ Código
 
-| Historia de Usuario | Caso de Uso | Sprint |
-|---------------------|-------------|--------|
-| 01H1 - Ingresar texto español → Braille | CU-01 | 1 |
-| 02H2 - Transcribir abecedario a-z | CU-02 | 1 |
-| 03H3 - Vocales acentuadas y ñ | CU-03 | 1 |
-| 04H4 - Números con signo numérico | CU-04 | 1 |
-| 05H5 - Indicador de mayúsculas | CU-05 | 1 |
-| 06H6 - Signos de puntuación | CU-06 | 2 |
-| 07H7 - Visualización gráfica Braille | CU-07 | 2 |
-| 08H8 - Señalética Braille espejo | CU-08 | 2 |
-| 09H9 - Braille → Español | CU-09 | 2 |
-| 10H10 - Limpiar campos | CU-10 | 2 |
+| HU V2 | Descripción | Caso(s) de Uso | Sprint | Código (ITERACION-2) |
+|--------|-------------|----------------|--------|---------------------|
+| 01H1 | Transcribir abecedario (a–z) | CU-01, CU-02 | 1 | `BrailleDictionary.initLetters()`, `BrailleMapper.españolABraille()` |
+| 02H2 | Vocales acentuadas y ñ | CU-03 | 1 | `BrailleDictionary.initAccents()` |
+| 03H3 | Números con signo numérico | CU-04 | 1 | `BrailleDictionary.initNumbers()`, `SIGNO_NUMERO` |
+| 04H4 | Mayúsculas con indicador | CU-05 | 1 | `BrailleMapper.SIGNO_MAYUSCULA` |
+| 05H5 | Signos de puntuación | CU-06 | 2 | `BrailleDictionary.initPunctuation()` |
+| 06H6 | Señalética imprimible | CU-07 | 2 | *Pendiente — Sprint 2* |
+| 07H7 | Braille → español (inverso) | CU-08 | 2 | `BrailleMapper.brailleAEspañol()`, `EspañolMapper` |
