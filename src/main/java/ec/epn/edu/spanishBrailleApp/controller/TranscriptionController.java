@@ -60,6 +60,19 @@ public class TranscriptionController {
 
         return "result-español";
     }
+    @PostMapping("/transcribir-Braille")
+    public String transcribirBraille(@RequestParam("texto") String texto, Model model) {
 
+        model.addAttribute("textoOriginal", texto);
+        model.addAttribute("resultadoEspañol", brailleMapper.brailleAEspañol(texto));
+
+        return "result-braille";
+    }
+    @PostMapping("/espejo")
+    public String transcribirEspejo(@RequestParam("texto") String texto, Model model) {
+
+        model.addAttribute("resultadoBraille", brailleMapper.españolABrailleEspejo(texto));
+        return "result-espejo";
+    }
 }
 

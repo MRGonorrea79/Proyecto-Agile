@@ -8,21 +8,33 @@ public class BrailleDictionary {
 
     private static final int SIGNO_NUMERO = mask(3, 4, 5, 6);
 
-    private final Map<String, Integer> map = new HashMap<>();
+    private final Map<String, Integer> mapaNormal   = new HashMap<>();
+    private final Map<String, Integer> mapaEspejo   = new HashMap<>();
+    private final Map<Integer, String> mapaInverso  = new HashMap<>();
 
     public BrailleDictionary() {
+
         initLetters();
         initAccents();
         initPunctuation();
         initNumbers();
+        initReverseMap();
     }
 
     // ===========================
-    //  GETTER (SOLO LECTURA)
+    //  GETTERS (SOLO LECTURA)
     // ===========================
 
-    public Map<String, Integer> getMap() {
-        return Collections.unmodifiableMap(map);
+    public Map<String, Integer> getMapaNormal() {
+        return Collections.unmodifiableMap(mapaNormal);
+    }
+
+    public Map<String, Integer> getMapaEspejo() {
+        return Collections.unmodifiableMap(mapaEspejo);
+    }
+
+    public Map<Integer, String> getMapaInverso() {
+        return Collections.unmodifiableMap(mapaInverso);
     }
 
     // ===========================
@@ -30,73 +42,139 @@ public class BrailleDictionary {
     // ===========================
 
     private void initLetters() {
-        map.put("a", mask(1));
-        map.put("b", mask(1, 2));
-        map.put("c", mask(1, 4));
-        map.put("d", mask(1, 4, 5));
-        map.put("e", mask(1, 5));
-        map.put("f", mask(1, 2, 4));
-        map.put("g", mask(1, 2, 4, 5));
-        map.put("h", mask(1, 2, 5));
-        map.put("i", mask(2, 4));
-        map.put("j", mask(2, 4, 5));
+        mapaNormal.put("a", mask(1));
+        mapaNormal.put("b", mask(1, 2));
+        mapaNormal.put("c", mask(1, 4));
+        mapaNormal.put("d", mask(1, 4, 5));
+        mapaNormal.put("e", mask(1, 5));
+        mapaNormal.put("f", mask(1, 2, 4));
+        mapaNormal.put("g", mask(1, 2, 4, 5));
+        mapaNormal.put("h", mask(1, 2, 5));
+        mapaNormal.put("i", mask(2, 4));
+        mapaNormal.put("j", mask(2, 4, 5));
 
-        map.put("k", addDot(map.get("a"), 3));
-        map.put("l", addDot(map.get("b"), 3));
-        map.put("m", addDot(map.get("c"), 3));
-        map.put("n", addDot(map.get("d"), 3));
-        map.put("o", addDot(map.get("e"), 3));
-        map.put("p", addDot(map.get("f"), 3));
-        map.put("q", addDot(map.get("g"), 3));
-        map.put("r", addDot(map.get("h"), 3));
-        map.put("s", addDot(map.get("i"), 3));
-        map.put("t", addDot(map.get("j"), 3));
-        map.put("u", addDot(map.get("k"), 6));
-        map.put("v", addDot(map.get("l"), 6));
-        map.put("x", addDot(map.get("m"), 6));
-        map.put("y", addDot(map.get("n"), 6));
-        map.put("z", addDot(map.get("o"), 6));
+        mapaEspejo.put("a", mask(4));
+        mapaEspejo.put("b", mask(4, 5));
+        mapaEspejo.put("c", mask(1, 4));
+        mapaEspejo.put("d", mask(1, 2, 4));
+        mapaEspejo.put("e", mask(2, 4));
+        mapaEspejo.put("f", mask(1, 4, 5));
+        mapaEspejo.put("g", mask(1, 2, 4, 5));
+        mapaEspejo.put("h", mask(2, 4, 5));
+        mapaEspejo.put("i", mask(1, 5));
+        mapaEspejo.put("j", mask(2, 4, 5));
 
-        map.put("ñ", mask(1, 2, 4, 5, 6));
-        map.put("ü", mask(1, 2, 5, 6));
+        mapaNormal.put("k", addDot(mapaNormal.get("a"), 3));
+        mapaNormal.put("l", addDot(mapaNormal.get("b"), 3));
+        mapaNormal.put("m", addDot(mapaNormal.get("c"), 3));
+        mapaNormal.put("n", addDot(mapaNormal.get("d"), 3));
+        mapaNormal.put("o", addDot(mapaNormal.get("e"), 3));
+        mapaNormal.put("p", addDot(mapaNormal.get("f"), 3));
+        mapaNormal.put("q", addDot(mapaNormal.get("g"), 3));
+        mapaNormal.put("r", addDot(mapaNormal.get("h"), 3));
+        mapaNormal.put("s", addDot(mapaNormal.get("i"), 3));
+        mapaNormal.put("t", addDot(mapaNormal.get("j"), 3));
+        mapaNormal.put("u", addDot(mapaNormal.get("k"), 6));
+        mapaNormal.put("v", addDot(mapaNormal.get("l"), 6));
+        mapaNormal.put("x", addDot(mapaNormal.get("m"), 6));
+        mapaNormal.put("y", addDot(mapaNormal.get("n"), 6));
+        mapaNormal.put("z", addDot(mapaNormal.get("o"), 6));
+        mapaNormal.put("ñ", mask(1, 2, 4, 5, 6));
+        mapaNormal.put("ü", mask(1, 2, 5, 6));
+
+        mapaEspejo.put("k", addDot(mapaEspejo.get("a"), 6));
+        mapaEspejo.put("l", addDot(mapaEspejo.get("b"), 6));
+        mapaEspejo.put("m", addDot(mapaEspejo.get("c"), 6));
+        mapaEspejo.put("n", addDot(mapaEspejo.get("d"), 6));
+        mapaEspejo.put("o", addDot(mapaEspejo.get("e"), 6));
+        mapaEspejo.put("p", addDot(mapaEspejo.get("f"), 6));
+        mapaEspejo.put("q", addDot(mapaEspejo.get("g"), 6));
+        mapaEspejo.put("r", addDot(mapaEspejo.get("h"), 6));
+        mapaEspejo.put("s", addDot(mapaEspejo.get("i"), 6));
+        mapaEspejo.put("t", addDot(mapaEspejo.get("j"), 6));
+        mapaEspejo.put("u", addDot(mapaEspejo.get("k"), 3));
+        mapaEspejo.put("v", addDot(mapaEspejo.get("l"), 3));
+        mapaEspejo.put("x", addDot(mapaEspejo.get("m"), 3));
+        mapaEspejo.put("y", addDot(mapaEspejo.get("n"), 3));
+        mapaEspejo.put("z", addDot(mapaEspejo.get("o"), 3));
+        mapaEspejo.put("ñ", mask(1, 2, 4, 5, 3));
+        mapaEspejo.put("ü", mask(4, 2, 5, 3));
     }
 
     private void initAccents() {
-        map.put("á", mask(1, 2, 3, 5, 6));
-        map.put("é", mask(2, 3, 4, 6));
-        map.put("í", mask(3, 4));
-        map.put("ó", mask(3, 4, 6));
-        map.put("ú", mask(2, 3, 4, 5, 6));
+        mapaNormal.put("á", mask(1, 2, 3, 5, 6));
+        mapaNormal.put("é", mask(2, 3, 4, 6));
+        mapaNormal.put("í", mask(3, 4));
+        mapaNormal.put("ó", mask(3, 4, 6));
+        mapaNormal.put("ú", mask(2, 3, 4, 5, 6));
+
+        mapaEspejo.put("á", mask(2, 3, 4, 5, 6));
+        mapaEspejo.put("é", mask(1, 3, 5, 6));
+        mapaEspejo.put("í", mask(1, 6));
+        mapaEspejo.put("ó", mask(3, 1, 6));
+        mapaEspejo.put("ú", mask(2, 3, 1, 5, 6));
     }
 
     private void initPunctuation() {
-        map.put(",", mask(2));
-        map.put(";", mask(2, 3));
-        map.put(":", mask(2, 5));
-        map.put(".", mask(3));
-        map.put("?", mask(2, 6));
-        map.put("!", mask(2, 3, 5));
-        map.put("-", mask(3, 6));
-        map.put("(", mask(1, 2, 6));
-        map.put(")", mask(3, 4, 5));
-        map.put("+", mask(2, 3, 5));
-        map.put("*", mask(3, 5));
-        map.put("=", mask(2, 3, 5, 6));
-        map.put(" ", 0);
+        mapaNormal.put(",", mask(2));
+        mapaNormal.put(";", mask(2, 3));
+        mapaNormal.put(":", mask(2, 5));
+        mapaNormal.put(".", mask(3));
+        mapaNormal.put("?", mask(2, 6));
+        mapaNormal.put("!", mask(2, 3, 5));
+        mapaNormal.put("-", mask(3, 6));
+        mapaNormal.put("(", mask(1, 2, 6));
+        mapaNormal.put(")", mask(3, 4, 5));
+        mapaNormal.put("+", mask(2, 3, 5));
+        mapaNormal.put("*", mask(3, 5));
+        mapaNormal.put("=", mask(2, 3, 5, 6));
+        mapaNormal.put(" ", 0);
+
+        mapaEspejo.put(",", mask(5));
+        mapaEspejo.put(";", mask(5, 6));
+        mapaEspejo.put(":", mask(2, 5));
+        mapaEspejo.put(".", mask(6));
+        mapaEspejo.put("?", mask(5, 3));
+        mapaEspejo.put("!", mask(2, 5, 6));
+        mapaEspejo.put("-", mask(3, 6));
+        mapaEspejo.put("(", mask(3, 4, 5));
+        mapaEspejo.put(")", mask(1, 2, 6));
+        mapaEspejo.put("+", mask(2, 5, 6));
+        mapaEspejo.put("*", mask(2, 3, 6));
+        mapaEspejo.put("=", mask(2, 3, 5, 6));
+        mapaEspejo.put(" ", 0);
     }
 
     private void initNumbers() {
-        map.put("#", SIGNO_NUMERO);
-        map.put("1", map.get("a"));
-        map.put("2", map.get("b"));
-        map.put("3", map.get("c"));
-        map.put("4", map.get("d"));
-        map.put("5", map.get("e"));
-        map.put("6", map.get("f"));
-        map.put("7", map.get("g"));
-        map.put("8", map.get("h"));
-        map.put("9", map.get("i"));
-        map.put("0", map.get("j"));
+        mapaNormal.put("#", SIGNO_NUMERO);
+        mapaNormal.put("1", mapaNormal.get("a"));
+        mapaNormal.put("2", mapaNormal.get("b"));
+        mapaNormal.put("3", mapaNormal.get("c"));
+        mapaNormal.put("4", mapaNormal.get("d"));
+        mapaNormal.put("5", mapaNormal.get("e"));
+        mapaNormal.put("6", mapaNormal.get("f"));
+        mapaNormal.put("7", mapaNormal.get("g"));
+        mapaNormal.put("8", mapaNormal.get("h"));
+        mapaNormal.put("9", mapaNormal.get("i"));
+        mapaNormal.put("0", mapaNormal.get("j"));
+
+        mapaEspejo.put("#", mask(1, 2, 3, 6));
+        mapaEspejo.put("1", mapaEspejo.get("a"));
+        mapaEspejo.put("2", mapaEspejo.get("b"));
+        mapaEspejo.put("3", mapaEspejo.get("c"));
+        mapaEspejo.put("4", mapaEspejo.get("d"));
+        mapaEspejo.put("5", mapaEspejo.get("e"));
+        mapaEspejo.put("6", mapaEspejo.get("f"));
+        mapaEspejo.put("7", mapaEspejo.get("g"));
+        mapaEspejo.put("8", mapaEspejo.get("h"));
+        mapaEspejo.put("9", mapaEspejo.get("i"));
+        mapaEspejo.put("0", mapaEspejo.get("j"));
+    }
+
+    private void initReverseMap() {
+        for (Map.Entry<String, Integer> e : mapaNormal.entrySet()) {
+            mapaInverso.put(e.getValue(), e.getKey());
+        }
     }
 
     // ===========================

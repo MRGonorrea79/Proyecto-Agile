@@ -1,8 +1,7 @@
-
 * { box-sizing: border-box; margin: 0; padding: 0; }
 html, body { height: 100%; }
 
-:root{
+:root {
     --bg: #f7f8fb;
     --card: #ffffff;
     --accent: #0b5fff;
@@ -16,7 +15,7 @@ html, body { height: 100%; }
     --braille-font: "Courier New", Courier, monospace;
 }
 
-body{
+body {
     font-family: Inter, "Helvetica Neue", Arial, sans-serif;
     background: linear-gradient(180deg, var(--bg), #eef2fb 120%);
     color: #0f1724;
@@ -27,7 +26,7 @@ body{
 }
 
 /* ---- Contenedor principal ---- */
-main{
+main {
     max-width: var(--max-width);
     margin: 0 auto;
     background: var(--card);
@@ -37,8 +36,8 @@ main{
     display: block;
 }
 
-/* Cabezera */
-h1{
+/* Cabecera */
+h1 {
     font-size: 1.6rem;
     margin-bottom: 12px;
     letter-spacing: -0.01em;
@@ -46,26 +45,26 @@ h1{
 }
 
 /* Formulario */
-form{
+form {
     margin-top: 8px;
     display: grid;
     gap: 12px;
 }
 
-label{
+label {
     font-size: 0.95rem;
     color: var(--muted);
     display: inline-block;
 }
 
-textarea{
+textarea {
     width: 100%;
     min-height: 140px;
     resize: vertical;
     padding: 12px;
     border-radius: 10px;
     border: 1px solid #dde6f2;
-    background: linear-gradient(180deg,#ffffff,#fbfdff);
+    background: linear-gradient(180deg, #ffffff, #fbfdff);
     box-shadow: inset 0 1px 0 rgba(255,255,255,0.6);
     font-family: var(--braille-font);
     font-size: 1rem;
@@ -74,15 +73,12 @@ textarea{
     transition: box-shadow .12s ease, border-color .12s ease;
 }
 
-textarea:focus{
+textarea:focus {
     border-color: var(--accent);
     box-shadow: 0 6px 18px rgba(11,95,255,0.08);
 }
 
-/* Checkbox + button layout */
-form > label[for="text"] { /* keep original label styling */ }
-
-form input[type="checkbox"]{
+form input[type="checkbox"] {
     width: 18px;
     height: 18px;
     vertical-align: middle;
@@ -91,7 +87,7 @@ form input[type="checkbox"]{
 }
 
 /* Botón principal */
-button[type="submit"]{
+button[type="submit"] {
     display: inline-block;
     margin-top: 6px;
     padding: 10px 18px;
@@ -106,25 +102,25 @@ button[type="submit"]{
     transition: transform .08s ease, box-shadow .12s ease, opacity .12s ease;
 }
 
-button[type="submit"]:hover{ transform: translateY(-2px); }
-button[type="submit"]:active{ transform: translateY(0); }
-button[type="submit"]:focus{ outline: 3px solid rgba(11,95,255,0.16); }
+button[type="submit"]:hover  { transform: translateY(-2px); }
+button[type="submit"]:active { transform: translateY(0); }
+button[type="submit"]:focus  { outline: 3px solid rgba(11,95,255,0.16); }
 
-section{
+section {
     margin-top: 20px;
     padding: 14px;
-    background: linear-gradient(180deg,#fbfcff,#ffffff);
+    background: linear-gradient(180deg, #fbfcff, #ffffff);
     border-radius: 10px;
     border: 1px solid #eef3fb;
 }
 
-section h2{
+section h2 {
     font-size: 1.05rem;
     margin-bottom: 8px;
     color: #0b2340;
 }
 
-section ul{
+section ul {
     margin-left: 16px;
     color: var(--muted);
     list-style: disc;
@@ -133,15 +129,10 @@ section ul{
 
 small, .muted { color: var(--muted); font-size: .9rem; }
 
-:focus{ outline-offset: 3px; }
+:focus { outline-offset: 3px; }
 
-@media (max-width: 640px){
-    body { padding: 18px 12px; }
-    h1 { font-size: 1.35rem; }
-    textarea { min-height: 120px; font-size: 0.98rem; }
-    main { padding: 18px; border-radius: 12px; }
-}
-.braille-output{
+/* ---- Braille output ---- */
+.braille-output {
     font-family: var(--braille-font);
     background: #f6f8ff;
     border: 1px dashed #dbe8ff;
@@ -153,27 +144,69 @@ small, .muted { color: var(--muted); font-size: .9rem; }
     letter-spacing: 0.06em;
 }
 
-.signage h1{ font-size: 3.4rem; }
-.signage textarea{ font-size: 2.2rem; min-height: 320px; padding: 22px; }
-.signage section{ padding: 28px; font-size: 1.6rem; }
+.braille-wrapper {
+    display: flex;
+    justify-content: center;
+    margin: 24px 0;
+}
 
+.braille-container {
+    font-family: var(--braille-font);
+    background: #f6f8ff;
+    border: 2px solid #cdd9ff;
+    padding: 28px;
+    border-radius: 14px;
+    white-space: pre-wrap;
+    word-break: break-word;
+    font-size: 3rem;
+    letter-spacing: 0.15em;
+    max-width: 1200px;
+    width: 100%;
+    margin: 0 auto;
+}
+
+/* ---- Modo señalética ---- */
+.signage h1       { font-size: 3.4rem; }
+.signage textarea { font-size: 2.2rem; min-height: 320px; padding: 22px; }
+.signage section  { padding: 28px; font-size: 1.6rem; }
+
+/* ---- Alertas ---- */
+.alert           { padding: 10px 14px; border-radius: 10px; margin-top: 8px; font-weight: 600; }
+.alert--success  { background: #e8f7ee; color: var(--success); border: 1px solid rgba(11,122,74,0.12); }
+.alert--error    { background: #fff0f0; color: var(--danger);  border: 1px solid rgba(194,57,57,0.08); }
+
+/* ---- Responsive ---- */
+@media (max-width: 640px) {
+    body     { padding: 18px 12px; }
+    h1       { font-size: 1.35rem; }
+    textarea { min-height: 120px; font-size: 0.98rem; }
+    main     { padding: 18px; border-radius: 12px; }
+}
+
+/* ---- Impresión ---- */
 @media print {
     body { background: white; color: black; padding: 0; }
     main { box-shadow: none; border-radius: 0; max-width: 100%; margin: 0; padding: 18mm; }
-    button, form input[type="checkbox"], label[for="text"] { display: none; } /* ocultar controles innecesarios */
     textarea { border: none; box-shadow: none; font-size: 22pt; min-height: 200pt; }
-    section { page-break-inside: avoid; font-size: 14pt; }
-    h1 { font-size: 28pt; margin-bottom: 8pt; }
-    .signage h1 { font-size: 72pt; }
+    section  { page-break-inside: avoid; font-size: 14pt; }
+    h1       { font-size: 28pt; margin-bottom: 8pt; }
+
+    .signage h1       { font-size: 72pt; }
     .signage textarea { font-size: 48pt; min-height: 600pt; }
-}
 
-.alert {
-    padding: 10px 14px;
-    border-radius: 10px;
-    margin-top: 8px;
-    font-weight: 600;
-}
+    .braille-container {
+        font-size: 48pt;
+        letter-spacing: 0.18em;
+        border: none;
+        padding: 20mm;
+        max-width: 100%;
+    }
 
-.alert--success { background: #e8f7ee; color: var(--success); border: 1px solid rgba(11,122,74,0.12); }
-.alert--error   { background: #fff0f0; color: var(--danger); border: 1px solid rgba(194,57,57,0.08); }
+    .braille-wrapper { margin: 0; display: block; }
+
+    button,
+    a,
+    form,
+    label[for="text"],
+    input[type="checkbox"] { display: none !important; }
+}
