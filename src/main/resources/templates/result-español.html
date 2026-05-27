@@ -3,10 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <title>Resultado — Braille</title>
-    <link rel="stylesheet" th:href="@{/styles.css}" />
-    <style>
-
-    </style>
+    <link rel="stylesheet" href="../styles.css" />
 </head>
 <body>
 <main>
@@ -16,14 +13,10 @@
         <strong th:text="${textoOriginal}"></strong>
     </p>
     <div class="braille-wrapper">
-        <div class="braille-container" th:utext="${resultadoBraille}"></div>
+        <div class="braille-container" th:utext="${resultado}"></div>
     </div>
     <p class="acciones">
         <a href="/" class="button">Nueva transcripción</a>
-    <form action="/espejo" method="post">
-        <input type="text" name="texto" th:value="${resultadoBraille}">
-        <button type="submit">Imprimir espejo</button>
-    </form>
     </p>
 </main>
 </body>
