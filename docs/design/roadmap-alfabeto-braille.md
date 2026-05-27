@@ -1,16 +1,11 @@
-# Roadmap — Alfabeto Braille Español
-
-## Spanish Braille Application
-
-**Fase XP:** II. Diseño  
-**Rol:** Programador — Diseño (Elian Caizapanta)  
-**Basado en:** Historias de Usuario V2, Velocidad del Proyecto y código existente (ITERACION-2)
-
----
+# Lógica del Negocio — Aplicación de Alfabeto Braille Español
 
 ## 1. Estructura de la Celda Braille
 
-El sistema Braille estándar utiliza una celda de **6 puntos** organizados en 2 columnas × 3 filas:
+El sistema debe trabajar con una celda Braille compuesta por 6 puntos organizados en dos columnas y tres filas.  
+Cada carácter Braille se define mediante una combinación específica de puntos activos e inactivos.
+
+Las posiciones válidas de los puntos son:
 
 ```
  ┌───┬───┐
@@ -22,235 +17,175 @@ El sistema Braille estándar utiliza una celda de **6 puntos** organizados en 2 
  └───┴───┘
 ```
 
-Cada punto puede estar **activo** (relieve) o **inactivo** (liso). La combinación de puntos activos define cada carácter.
-
-**Representación Unicode:** El bloque Braille en Unicode es `U+2800` a `U+28FF`. La máscara de bits se calcula como:  
-`U+2800 + (1 << (punto-1))` para cada punto activo.
+Cada combinación representa una letra, número, signo o carácter especial del idioma español.
 
 ---
 
-## 2. Alfabeto — Serie 1 (a–j)
+## 2. Conversión de Letras del Alfabeto
+<img width="621" height="386" alt="imagen" src="https://github.com/user-attachments/assets/3e3a7492-5d6d-44ba-bd37-821429e8f0b5" />
 
-Las primeras 10 letras usan solo los puntos 1, 2, 4 y 5:
 
-| Letra | Puntos | Unicode | Representación |
-|-------|--------|---------|----------------|
-| a | 1 | ⠁ | `⠁` |
-| b | 1,2 | ⠃ | `⠃` |
-| c | 1,4 | ⠉ | `⠉` |
-| d | 1,4,5 | ⠙ | `⠙` |
-| e | 1,5 | ⠑ | `⠑` |
-| f | 1,2,4 | ⠋ | `⠋` |
-| g | 1,2,4,5 | ⠛ | `⠛` |
-| h | 1,2,5 | ⠓ | `⠓` |
-| i | 2,4 | ⠊ | `⠊` |
-| j | 2,4,5 | ⠚ | `⠚` |
+El sistema debe permitir convertir letras del alfabeto español a su equivalente Braille.
+
+### Reglas generales
+
+- Las letras `a–j` pertenecen a la primera serie base.
+- Las letras `k–t` reutilizan los patrones anteriores agregando el punto 3.
+- Las letras `u–z` reutilizan patrones agregando el punto 6.
+- Las letras especiales del español (`ñ`, `ü`) deben tener representación propia.
+
+El sistema debe reconocer tanto letras minúsculas como mayúsculas.
 
 ---
 
-## 3. Alfabeto — Serie 2 (k–t)
+## 3. Manejo de Vocales Acentuadas
 
-Serie 1 + punto 3 adicional:
+El sistema debe reconocer y convertir correctamente:
 
-| Letra | Puntos | Unicode | Representación |
-|-------|--------|---------|----------------|
-| k | 1,3 | ⠅ | `⠅` |
-| l | 1,2,3 | ⠇ | `⠇` |
-| m | 1,3,4 | ⠍ | `⠍` |
-| n | 1,3,4,5 | ⠝ | `⠝` |
-| o | 1,3,5 | ⠕ | `⠕` |
-| p | 1,2,3,4 | ⠏ | `⠏` |
-| q | 1,2,3,4,5 | ⠟ | `⠟` |
-| r | 1,2,3,5 | ⠗ | `⠗` |
-| s | 2,3,4 | ⠎ | `⠎` |
-| t | 2,3,4,5 | ⠞ | `⠞` |
+- á
+- é
+- í
+- ó
+- ú
+
+Cada vocal acentuada debe poseer una representación Braille específica e independiente de su versión sin tilde.
 
 ---
 
-## 4. Alfabeto — Serie 3 (u–z)
+## 4. Conversión de Números
 
-Serie 2 + punto 6 adicional (excepciones):
+Los números del 0 al 9 deben representarse mediante:
 
-| Letra | Puntos | Unicode | Representación |
-|-------|--------|---------|----------------|
-| u | 1,3,6 | ⠥ | `⠥` |
-| v | 1,2,3,6 | ⠧ | `⠧` |
-| x | 1,3,4,6 | ⠭ | `⠭` |
-| y | 1,3,4,5,6 | ⠽ | `⠽` |
-| z | 1,3,5,6 | ⠵ | `⠵` |
+1. Un indicador de número.
+2. El patrón equivalente de las letras base `a–j`.
 
----
+### Regla de secuencia numérica
 
-## 5. Letras Adicionales del Español
+Cuando existan varios dígitos consecutivos:
 
-| Carácter | Puntos | Unicode | Representación |
-|----------|--------|---------|----------------|
-| ñ | 1,2,4,5,6 | ⠻ | `⠻` |
-| ü | 1,2,5,6 | ⠳ | `⠳` |
+- El indicador numérico debe colocarse una sola vez al inicio de la secuencia.
+- El modo numérico permanece activo hasta que aparezca un carácter no numérico.
+
+Ejemplo conceptual:
+
+- `123` → indicador numérico + representación de 1, 2 y 3.
 
 ---
 
-## 6. Vocales Acentuadas
+## 5. Manejo de Mayúsculas
 
-| Carácter | Puntos | Unicode | Representación |
-|----------|--------|---------|----------------|
-| á | 1,2,3,5,6 | ⠷ | `⠷` |
-| é | 2,3,4,6 | ⠮ | `⠮` |
-| í | 3,4 | ⠌ | `⠌` |
-| ó | 3,4,6 | ⠬ | `⠬` |
-| ú | 2,3,4,5,6 | ⠾ | `⠾` |
+El sistema debe diferenciar letras mayúsculas de minúsculas.
 
----
+### Reglas
 
-## 7. Números (0–9)
-
-Los números se representan anteponiendo el **signo de número** (puntos 3456 = `⠼`) y usando las letras de la Serie 1:
-
-| Número | Equivalente | Puntos (letra) | Con signo | Ejemplo |
-|--------|-------------|-----------------|-----------|---------|
-| 1 | a | 1 | ⠼⠁ | `⠼⠁` |
-| 2 | b | 1,2 | ⠼⠃ | `⠼⠃` |
-| 3 | c | 1,4 | ⠼⠉ | `⠼⠉` |
-| 4 | d | 1,4,5 | ⠼⠙ | `⠼⠙` |
-| 5 | e | 1,5 | ⠼⠑ | `⠼⠑` |
-| 6 | f | 1,2,4 | ⠼⠋ | `⠼⠋` |
-| 7 | g | 1,2,4,5 | ⠼⠛ | `⠼⠛` |
-| 8 | h | 1,2,5 | ⠼⠓ | `⠼⠓` |
-| 9 | i | 2,4 | ⠼⠊ | `⠼⠊` |
-| 0 | j | 2,4,5 | ⠼⠚ | `⠼⠚` |
-
-> **Regla:** Para secuencias multi-cifra (ej. "123"), el signo de número se antepone solo una vez: `⠼⠁⠃⠉`
+- Una letra mayúscula debe antecederse por un indicador de mayúscula.
+- Si una palabra completa está en mayúsculas, debe utilizarse un indicador de doble mayúscula.
 
 ---
 
-## 8. Signos de Puntuación
+## 6. Conversión de Signos de Puntuación
 
-| Signo | Puntos | Unicode | Representación |
-|-------|--------|---------|----------------|
-| , (coma) | 2 | ⠂ | `⠂` |
-| ; (punto y coma) | 2,3 | ⠆ | `⠆` |
-| : (dos puntos) | 2,5 | ⠒ | `⠒` |
-| . (punto) | 3 | ⠄ | `⠄` |
-| ? (interrogación cierre) | 2,6 | ⠢ | `⠢` |
-| ! (exclamación cierre) | 2,3,5 | ⠖ | `⠖` |
-| - (guión) | 3,6 | ⠤ | `⠤` |
-| ( (paréntesis apertura) | 1,2,6 | ⠣ | `⠣` |
-| ) (paréntesis cierre) | 3,4,5 | ⠜ | `⠜` |
+El sistema debe soportar símbolos de puntuación comunes del español, incluyendo:
 
----
+- coma
+- punto
+- punto y coma
+- dos puntos
+- signos de interrogación
+- signos de exclamación
+- guiones
+- paréntesis
 
-## 9. Signos de Control
-
-| Signo | Puntos | Unicode | Descripción |
-|-------|--------|---------|-------------|
-| Signo de número | 3,4,5,6 | ⠼ | Antecede a dígitos para indicar modo numérico |
-| Indicador de mayúscula | 4,6 | ⠠ | Antecede a una letra mayúscula |
-| Doble mayúscula | 4,6 + 4,6 | ⠠⠠ | Indica palabra completa en mayúsculas |
-| Espacio | (ninguno) | ⠀ (U+2800) | Separador de palabras |
+Cada signo debe poseer una representación Braille específica.
 
 ---
 
-## 10. Braille Espejo
+## 7. Espacios y Separación de Palabras
 
-La aplicación implementa una función de **Braille Espejo** que refleja horizontalmente cada cuadratín:
-- Puntos izquierdos (1,2,3) ↔ Puntos derechos (4,5,6)
+El sistema debe reconocer espacios entre palabras y representarlos como separadores vacíos dentro de la transcripción Braille.
 
-Esta representación se usa para crear **matrices de impresión**: al imprimir el espejo y dar vuelta al papel, el relieve se lee correctamente.
-
----
-
-## 11. Ejemplo de Transcripción
-
-**Texto:** `Hola 123`
-
-| Paso | Carácter | Acción | Resultado Braille |
-|------|----------|--------|-------------------|
-| 1 | H | Mayúscula → indicador (46) + h (125) | ⠠⠓ |
-| 2 | o | Letra serie 2 (135) | ⠕ |
-| 3 | l | Letra serie 2 (123) | ⠇ |
-| 4 | a | Letra serie 1 (1) | ⠁ |
-| 5 | (espacio) | Espacio | ⠀ |
-| 6 | 1 | Signo número (3456) + a (1) | ⠼⠁ |
-| 7 | 2 | b (12) — modo numérico activo | ⠃ |
-| 8 | 3 | c (14) — modo numérico activo | ⠉ |
-
-**Resultado:** `⠠⠓⠕⠇⠁⠀⠼⠁⠃⠉`
+Los espacios no deben activar reglas especiales ni modificar estados de numeración o mayúsculas más allá de finalizar secuencias activas.
 
 ---
 
-## 12. Planificación de Sprints
+## 8. Modo Braille Espejo
 
-### Release Plan
+El sistema debe incluir una función de “Braille espejo”.
 
-| Sprint | Objetivo | HUs | Story Points | Velocidad |
-|--------|----------|-----|-------------|-----------|
-| Sprint 1 | Núcleo de transcripción: español → Braille | 01H1 (5), 02H2 (3), 03H3 (2), 04H4 (2) | 12 pts | 3.0 pts/sem |
-| Sprint 2 | Puntuación, señalética, bidireccionalidad | 05H5 (3), 06H6 (7), 07H7 (5) | 15 pts | 3.8 pts/sem |
-| **Total** | | **7 HU** | **27 pts** | **3.4 pts/sem** |
+### Objetivo
 
----
+Generar una representación invertida horizontalmente para procesos de impresión en relieve.
 
-### Sprint 1 — Transcripción base español → Braille
+### Regla de inversión
 
-```mermaid
-gantt
-    title Sprint 1 — Transcripción Base (12 pts · 4 semanas)
-    dateFormat  YYYY-MM-DD
-    axisFormat  %d/%m
-    
-    section 01H1 Abecedario a-z (5 pts)
-    Crear mapa series 1,2,3          :s1h1a, 2026-01-13, 4d
-    Implementar conversión + tests   :s1h1b, after s1h1a, 4d
-    
-    section 02H2 Acentos y ñ (3 pts)
-    Extender mapa á,é,í,ó,ú,ñ,ü     :s1h2a, after s1h1b, 3d
-    Tests integración con acentos    :s1h2b, after s1h2a, 2d
-    
-    section 03H3 Números (2 pts)
-    Detección dígitos + signo número :s1h3a, after s1h2b, 3d
-    Validar multi-cifra + tests      :s1h3b, after s1h3a, 2d
-    
-    section 04H4 Mayúsculas (2 pts)
-    Indicador mayúscula (46) + lógica:s1h4a, after s1h3b, 3d
-    Tests texto mixto                :s1h4b, after s1h4a, 2d
-    
-    section Interfaz
-    Diseñar campo entrada + botón    :s1ui, 2026-01-13, 4d
-    Enrutamiento Spring Boot         :s1be, after s1ui, 3d
-```
+- Los puntos izquierdos se intercambian con los derechos:
+  - 1 ↔ 4
+  - 2 ↔ 5
+  - 3 ↔ 6
+
+La representación espejo debe conservar el significado original del carácter.
 
 ---
 
-### Sprint 2 — Visualización, Señalética y Bidireccionalidad
+## 9. Transcripción Español → Braille
 
-```mermaid
-gantt
-    title Sprint 2 — Funciones Avanzadas (15 pts · 4 semanas)
-    dateFormat  YYYY-MM-DD
-    axisFormat  %d/%m
-    
-    section 05H5 Puntuación (3 pts)
-    Extender mapa puntuación         :s2h5a, 2026-02-10, 3d
-    Tests con oraciones completas    :s2h5b, after s2h5a, 2d
-    
-    section 06H6 Señalética (7 pts)
-    Diseñar plantilla señalética     :s2h6a, after s2h5b, 4d
-    Implementar export PNG/PDF       :s2h6b, after s2h6a, 5d
-    
-    section 07H7 Braille→Español (5 pts)
-    Función inversa Braille→español  :s2h7a, after s2h6b, 4d
-    Interfaz selector puntos + tests :s2h7b, after s2h7a, 4d
-```
+El sistema debe permitir convertir texto escrito en español a Braille.
+
+### Flujo lógico
+
+Para cada carácter del texto:
+
+1. Identificar el tipo de carácter:
+   - letra
+   - número
+   - espacio
+   - puntuación
+   - carácter especial
+
+2. Aplicar reglas contextuales:
+   - indicador numérico
+   - indicador de mayúscula
+   - doble mayúscula
+
+3. Generar la representación Braille correspondiente.
+
+4. Mantener estados activos cuando corresponda:
+   - modo numérico
+   - palabra en mayúsculas
 
 ---
 
-### Velocidad del Proyecto
+## 10. Transcripción Braille → Español
 
-| Sprint | Story Points | Horas Est. | Hrs Disponibles | Hrs/Punto | Velocidad |
-|--------|-------------|------------|-----------------|-----------|-----------|
-| Sprint 1 | 12 pts | 24 h | 96 h | 2.0 h/pt | 3.0 pts/sem |
-| Sprint 2 | 15 pts | 28 h | 96 h | 1.9 h/pt | 3.8 pts/sem |
-| **Promedio** | **27 pts** | **52 h** | **96 h** | **1.9 h/pt** | **3.4 pts/sem** |
+El sistema debe permitir la conversión inversa desde Braille hacia texto en español.
 
-> **Capacidad:** 3 personas × 2 h/día × 20 días × 0.80 eficiencia = **96 h netas/sprint**  
-> **Velocidad promedio:** Si el equipo mantiene 3.4 pts/sem, puede planificar iteraciones de 12–15 pts de manera sostenible.
+### Requisitos
+
+- Interpretar indicadores numéricos.
+- Interpretar indicadores de mayúsculas.
+- Reconocer puntuación y caracteres especiales.
+- Reconstruir correctamente palabras y números.
+
+---
+
+## 11. Reglas de Validación
+
+El sistema debe validar que:
+
+- Solo se procesen caracteres soportados.
+- Las secuencias Braille tengan estructuras válidas.
+- Los indicadores contextuales sean interpretados correctamente.
+- Las conversiones mantengan coherencia bidireccional.
+
+---
+
+## 12. Objetivos Funcionales del Sistema
+
+La aplicación debe permitir:
+
+- Convertir texto español a Braille.
+- Convertir Braille a texto español.
+- Representar caracteres especiales del español.
+- Manejar números y mayúsculas.
+- Generar representación Braille espejo.
+- Facilitar la creación de material accesible y señalética Braille.
