@@ -8,18 +8,24 @@
 <body>
 <main>
     <h1>Transcripción</h1>
+
     <p>
         Texto original:
         <strong th:text="${textoOriginal}"></strong>
     </p>
+
     <div class="braille-wrapper">
         <div class="braille-container" th:utext="${resultado}"></div>
     </div>
-    <p class="acciones">
-        <a href="/" class="button">Nueva transcripción</a>
-    </p>
+
+    <div class="acciones">
+        <a href="/" class="btn-atras">← Volver al inicio</a>
+    </div>
+    <form action="/espejo" method="post">
+        <input type="text" name="texto" th:value="${textoOriginal}">
+        <button type="submit">Imprimir espejo</button>
+    </form>
+
 </main>
 </body>
 </html>
-
-

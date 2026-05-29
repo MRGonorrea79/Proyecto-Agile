@@ -4,22 +4,20 @@
     <meta charset="UTF-8" />
     <title>Resultado — Braille</title>
     <link rel="stylesheet" href="../styles.css" />
+    <script>
+        window.onload = function () {
+            window.print();
+        };
+    </script>
 </head>
 <body>
 <main>
-    <h1>Transcripción</h1>
-    <p>
-        Texto original:
-        <strong th:text="${textoOriginal}"></strong>
-    </p>
     <div class="braille-wrapper">
         <div class="braille-container" th:utext="${resultado}"></div>
     </div>
-    <p class="acciones">
-        <a href="/" class="button">Nueva transcripción</a>
-    </p>
+    <div class="acciones">
+        <a href="/" class="btn-atras">← Volver al inicio</a>
+    </div>
 </main>
 </body>
 </html>
-
-
