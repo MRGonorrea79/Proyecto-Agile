@@ -1,0 +1,83 @@
+\documentclass[11pt]{article}
+\input{preambulo.tex}
+
+\title{Product Backlog}
+\author{}
+\date{}
+
+\begin{document}
+\artefactoTitulo{Product Backlog}{Lista priorizada de requisitos del producto}
+
+\section{Introducción}
+Este documento contiene el \textbf{Product Backlog} del proyecto \textit{Spanish Braille Application},
+una aplicación web (Spring Boot + Thymeleaf) que traduce texto en español a Braille Unicode y viceversa,
+incluyendo acentos, la letra \textbf{ñ}, números, mayúsculas, signos de puntuación y una variante de
+\textbf{Braille espejo} para impresión en relieve.
+
+El Backlog es mantenido por el \textbf{Product Owner (José Castro)} y refleja las Historias de Usuario (HU)
+priorizadas para los dos sprints ejecutados hasta la fecha, derivadas del documento de lógica de negocio
+(\texttt{docs/design/roadmap-alfabeto-braille.md}) y verificadas contra la implementación real
+(\texttt{src/main/java/.../service}, \texttt{controller}) y las pruebas unitarias del repositorio.
+
+\section{Ítems del Product Backlog}
+
+\renewcommand{\arraystretch}{1.35}
+\begin{longtable}{|>{\raggedright\arraybackslash}p{1.6cm}|p{6.7cm}|>{\centering\arraybackslash}p{1.2cm}|>{\centering\arraybackslash}p{1.6cm}|>{\centering\arraybackslash}p{1.1cm}|p{2.5cm}|}
+\hline
+\rowcolor{epnblue}
+\textcolor{white}{\textbf{ID}} & \textcolor{white}{\textbf{Historia de Usuario}} & \textcolor{white}{\textbf{Pts}} & \textcolor{white}{\textbf{Prioridad}} & \textcolor{white}{\textbf{Sprint}} & \textcolor{white}{\textbf{Estado}} \\
+\hline
+\endfirsthead
+\hline
+\rowcolor{epnblue}
+\textcolor{white}{\textbf{ID}} & \textcolor{white}{\textbf{Historia de Usuario}} & \textcolor{white}{\textbf{Pts}} & \textcolor{white}{\textbf{Prioridad}} & \textcolor{white}{\textbf{Sprint}} & \textcolor{white}{\textbf{Estado}} \\
+\hline
+\endhead
+
+\rowcolor{epnrow}
+01H1 & Como usuario, quiero transcribir el abecedario español (a--z, series 1.\textsuperscript{a}, 2.\textsuperscript{a} y 3.\textsuperscript{a}) a Braille Unicode, para poder generar texto Braille legible a partir de texto plano. & 5 & Alta & 1 & \cellcolor{green!25}Hecho \\
+\hline
+02H2 & Como usuario, quiero convertir vocales acentuadas (á, é, í, ó, ú) y la letra ñ a su representación Braille específica, para transcribir correctamente palabras en español con tildes y diéresis. & 3 & Media & 1 & \cellcolor{green!25}Hecho \\
+\hline
+\rowcolor{epnrow}
+03H3 & Como usuario, quiero transcribir números (0--9) anteponiendo el signo numérico Braille (puntos 3-4-5-6), para representar cifras de forma correcta según el estándar Braille español. & 2 & Alta & 1 & \cellcolor{green!25}Hecho \\
+\hline
+04H4 & Como usuario, quiero que las letras mayúsculas se antepongan con el indicador Braille de mayúscula (puntos 4-6), para distinguir mayúsculas de minúsculas en el texto transcrito. & 2 & Media & 1 & \cellcolor{green!25}Hecho \\
+\hline
+\rowcolor{epnrow}
+05H5 & Como usuario, quiero convertir signos de puntuación básicos (\texttt{. , ; : ¿ ? ¡ !}) a su representación Braille, para transcribir oraciones completas con su puntuación original. & 3 & Media & 2 & \cellcolor{green!25}Hecho \\
+\hline
+06H6 & Como usuario con discapacidad visual o docente de braille, quiero generar señalética Braille imprimible a partir de un texto, para producir material accesible en relieve. & 7 & Alta & 2 & \cellcolor{yellow!40}Parcial \\
+\hline
+\rowcolor{epnrow}
+07H7 & Como usuario, quiero transcribir un patrón Braille Unicode de vuelta a español (conversión inversa), para poder leer e interpretar contenido escrito originalmente en Braille. & 5 & Alta & 2 & \cellcolor{green!25}Hecho \\
+\hline
+\end{longtable}
+
+\vspace{0.3cm}
+\noindent\textbf{Story points totales:} 27 pts
+
+\noindent\textbf{Leyenda de estado:} \colorbox{green!25}{Hecho} = funcionalidad implementada y cubierta por pruebas unitarias
+verificables en \texttt{src/test/java}; \colorbox{yellow!40}{Parcial} = el equipo (Elian Caizapanta) reporta
+la exportación de señalética como completada y la vista permite imprimir el resultado en espejo
+(botón ``Imprimir espejo'' en \texttt{result-braille.html}), pero la rama de este repositorio aún no
+refleja una exportación dedicada a PNG/PDF independiente del navegador --- pendiente de confirmar
+sincronización antes de la entrega (ver Sprint Backlog).
+
+\section{Criterios de priorización}
+El backlog se priorizó combinando:
+\begin{itemize}[leftmargin=1.4cm]
+  \item \textbf{Valor para el usuario final} (accesibilidad: transcripción bidireccional funcional primero).
+  \item \textbf{Dependencias técnicas}: el abecedario base (01H1) es prerequisito de acentos, mayúsculas,
+        números y puntuación, por lo que se ubicó primero en el Sprint 1.
+  \item \textbf{Complejidad/Riesgo}: 06H6 (señalética exportable) es la historia de mayor esfuerzo (7 pts)
+        y mayor incertidumbre técnica, por lo que se dejó al final del Sprint 2.
+\end{itemize}
+
+\section{Refinamiento continuo}
+Este Product Backlog es un artefacto vivo: el Product Owner (José Castro), junto con el equipo de desarrollo,
+lo revisa al inicio de cada Sprint Planning para reordenar prioridades, dividir historias grandes
+(p. ej. 06H6 podría dividirse en ``renderizar señalética'' + ``exportar a PNG'' + ``exportar a PDF''
+en una futura iteración) y agregar nuevas historias que surjan de la retroalimentación de usuarios.
+
+\end{document}

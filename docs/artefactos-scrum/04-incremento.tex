@@ -1,0 +1,71 @@
+\documentclass[11pt]{article}
+\input{preambulo.tex}
+
+\begin{document}
+\artefactoTitulo{Incremento}{Producto potencialmente entregable al cierre del Sprint 2}
+
+\section{Definición}
+El \textbf{Incremento} es la suma de todos los ítems del Product Backlog completados durante el
+Sprint 1 y el Sprint 2, integrados en una aplicación web funcional, ejecutable y potencialmente
+entregable al usuario final (personas usuarias de Braille, docentes o instituciones educativas).
+
+\section{Funcionalidad incluida en este Incremento}
+\begin{enumerate}[leftmargin=1.4cm]
+  \item \textbf{Transcripción Español \(\rightarrow\) Braille} (\texttt{POST /transcribir-Español}):
+        convierte abecedario completo, vocales acentuadas, ñ, números con signo numérico, mayúsculas
+        (simples y dobles) y signos de puntuación básicos.
+  \item \textbf{Transcripción Braille \(\rightarrow\) Español} (\texttt{POST /transcribir-Braille}):
+        conversión inversa que reconstruye palabras, números y mayúsculas a partir de una cadena Braille
+        Unicode.
+  \item \textbf{Braille espejo} (\texttt{POST /espejo}): genera la representación invertida horizontalmente
+        (puntos 1\(\leftrightarrow\)4, 2\(\leftrightarrow\)5, 3\(\leftrightarrow\)6) para impresión en
+        relieve desde el reverso, con vista dedicada y botón de impresión del navegador.
+  \item \textbf{Interfaz web} servida con Thymeleaf: página principal de entrada de texto
+        (\texttt{index.html}) y tres vistas de resultado especializadas.
+\end{enumerate}
+
+\section{Definition of Done aplicada}
+\begin{itemize}[leftmargin=1.4cm]
+  \item[\checkmark] Código integrado en la rama principal del repositorio de referencia
+        (\texttt{ITERACION-2}).
+  \item[\checkmark] Compila y arranca con \texttt{mvn spring-boot:run} / \texttt{mvn -q test}.
+  \item[\checkmark] Cobertura de pruebas unitarias para los 3 flujos principales:
+        \texttt{BrailleConverterServiceTest} (7 casos: básico, mayúsculas, acentos, ñ, números,
+        puntuación, espejo) e \texttt{InverseBrailleServiceTest}.
+  \item[\checkmark] Arquitectura refactorizada siguiendo SOLID: un servicio con responsabilidad única
+        por regla de negocio (\texttt{AlphabetMapService}, \texttt{AccentMapService},
+        \texttt{NumberMapService}, \texttt{UpperCaseHandlerService}, \texttt{PunctuationMapService},
+        \texttt{BrailleRendererService}) y un mapa de datos centralizado (\texttt{BrailleCharacterMap}).
+  \item[$\sim$] Documentación de diseño actualizada (CRC, casos de uso, diagrama de clases, roadmap).
+  \item[$\sim$] Exportación de señalética a PNG/PDF --- el equipo reporta la tarea (Elian Caizapanta)
+        como completada, pero no está confirmada en la rama de este repositorio (ver nota en el Sprint
+        Backlog); mientras se confirma, se apoya en impresión de navegador como solución provisional.
+  \item[\checkmark] \textbf{Este incremento} añade además: contenedor Docker reproducible
+        (\texttt{Dockerfile} multi-stage) y documentación de artefactos Scrum en LaTeX/PDF.
+\end{itemize}
+
+\section{Cómo ejecutar y validar el Incremento}
+\begin{enumerate}[leftmargin=1.4cm]
+  \item \textbf{Localmente:} \texttt{./mvnw spring-boot:run} y abrir \url{http://localhost:8080}.
+  \item \textbf{Con Docker:} \texttt{docker compose up --build} y abrir \url{http://localhost:8080}
+        (ver \texttt{Dockerfile} y \texttt{docker-compose.yml} en la raíz del repositorio).
+  \item \textbf{Pruebas automatizadas:} \texttt{./mvnw test} ejecuta la suite JUnit 5 + AssertJ que
+        valida los 7 escenarios de transcripción descritos en la Sección 3.
+\end{enumerate}
+
+\section{Valor entregado al Product Owner}
+Con este incremento, \textbf{José Castro (Product Owner)} cuenta con una aplicación desplegable que
+resuelve el objetivo central del producto --- accesibilidad Braille bidireccional en español --- y puede
+decidir si el ítem por confirmar (exportación PNG/PDF) se libera en un incremento posterior o si el
+producto actual ya aporta valor suficiente para una demostración/entrega parcial (\textit{release}) a
+usuarios reales.
+
+\section{Definición de Terminado (Definition of Done)}
+Para que una tarea del Sprint Backlog se marque como \textbf{Completada}, el equipo exige que cumpla no
+solo ``código escrito'' sino \textbf{``probado e integrado''}: compila sin errores, cuenta con al menos
+una prueba unitaria que documenta su comportamiento esperado (ver \texttt{src/test/java}), y su
+funcionalidad es accesible desde la interfaz web end-to-end. La suma de todas las tareas que cumplen esta
+definición --- no solo las que ``parecen listas'' --- es lo que constituye el \textbf{Incremento}
+potencialmente entregable que se demuestra en cada Sprint Review.
+
+\end{document}

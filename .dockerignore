@@ -1,0 +1,10 @@
+target/
+.git/
+.idea/
+*.iml
+*.log
+docs/artefactos-scrum/*.log.txt
+docs/artefactos-scrum/*.aux
+docs/artefactos-scrum/*.log
+docs/artefactos-scrum/*.out
+docs/artefactos-scrum/*.toc

@@ -1,0 +1,77 @@
+% Preámbulo compartido por los artefactos Scrum del proyecto
+% Proyecto Agile — Spanish Braille Application (EPN)
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[spanish]{babel}
+\usepackage[a4paper,margin=2.3cm]{geometry}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{colortbl}
+\usepackage{enumitem}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{tcolorbox}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepackage{hyperref}
+
+\definecolor{epnblue}{HTML}{2E4C9C}
+\definecolor{epnbluelight}{HTML}{4B6FCB}
+\definecolor{epnrow}{HTML}{EDF1FB}
+\definecolor{epngray}{HTML}{555555}
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=epnblue,
+  urlcolor=epnblue,
+  citecolor=epnblue,
+  pdfcreator={XeLaTeX},
+}
+
+\titleformat{\section}
+  {\normalfont\Large\bfseries\color{epnblue}}{\thesection}{0.6em}{}
+\titleformat{\subsection}
+  {\normalfont\large\bfseries\color{epnbluelight}}{\thesubsection}{0.6em}{}
+
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0.2pt}
+\fancyfoot[C]{\thepage}
+
+\newcommand{\artefactoTitulo}[2]{%
+  \begin{titlepage}
+    \centering
+    \vspace*{1.2cm}
+    {\large Escuela Politécnica Nacional\par}
+    {\normalsize Facultad de Ingeniería de Sistemas\par}
+    {\normalsize Construcción y Evolución de Software --- Primer Bimestre\par}
+    \vspace{1.4cm}
+    \begin{tcolorbox}[colback=epnblue,colframe=epnblue,coltext=white,arc=2mm,boxrule=0pt,width=0.92\textwidth,halign=center]
+      {\Huge\bfseries #1\par}
+    \end{tcolorbox}
+    \vspace{0.5cm}
+    {\Large #2\par}
+    \vspace{1.6cm}
+    {\large\bfseries Proyecto Agile --- Spanish Braille Application\par}
+    \vspace{0.3cm}
+    {\normalsize Traducción bidireccional español \(\leftrightarrow\) Braille Unicode\par}
+    \vfill
+    \begin{tabular}{ll}
+      \textbf{Product Owner:}  & José Castro \\
+      \textbf{Scrum Master:}   & Victor Aveiga \\
+      \textbf{Equipo de Desarrollo:} & Javier Angulo, Elian Caizapanta, Erick Costa, Emily Aumala \\
+    \end{tabular}
+    \vspace{0.8cm}
+    \par\noindent\rule{0.5\textwidth}{0.4pt}\par
+    \vspace{0.3cm}
+    {\normalsize Documento preparado por: Erick Costa (Equipo de Desarrollo)\par}
+    {\normalsize \today\par}
+  \end{titlepage}
+  \fancyhead[L]{Proyecto Agile --- Spanish Braille App}
+  \fancyhead[R]{#1}
+}
