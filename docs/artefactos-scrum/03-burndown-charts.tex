@@ -1,0 +1,121 @@
+\documentclass[11pt]{article}
+\input{preambulo.tex}
+
+\begin{document}
+\artefactoTitulo{Burndown Charts}{Seguimiento de avance por sprint}
+
+\section{Metodología de medición}
+Los gráficos de esta sección muestran la \textbf{línea ideal} (avance lineal esperado según la
+capacidad y duración real de cada sprint) para el \textbf{Sprint 1} (22 jun -- 3 jul 2026, 10 días
+hábiles, 12 pts) y el \textbf{Sprint 2} (6 -- 10 jul 2026, 5 días hábiles, 15 pts). Entre ambos suman los
+\textbf{15 registros diarios} del Daily Scrum (pestaña 04, a cargo del Scrum Master Victor Aveiga).
+
+Los dos puntos de la \textbf{línea real} que se pueden confirmar de forma independiente son: el inicio
+(capacidad total pendiente) y el cierre de cada sprint, donde el Product Owner (José Castro) aceptó el
+incremento en la Sprint Review correspondiente (0 pts pendientes al cierre). La trayectoria diaria
+intermedia depende del registro día a día del tablero Kanban y del Daily Scrum, que no forma parte de
+este repositorio de código; la tabla de la sección \ref{sec:registro} está lista para completarse con
+esos valores reales y así reemplazar la aproximación lineal por la curva real de avance.
+
+\section{Sprint 1 --- Transcripción Base (12 pts, 22 jun -- 3 jul)}
+
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[
+  width=0.95\textwidth, height=7cm,
+  xlabel={Día hábil del sprint}, ylabel={Story points restantes},
+  xmin=0, xmax=10, ymin=0, ymax=13,
+  xtick={0,1,2,3,4,5,6,7,8,9,10}, ytick={0,3,6,9,12},
+  grid=both, grid style={line width=.1pt, draw=gray!25},
+  major grid style={line width=.2pt,draw=gray!45},
+  legend pos=north east, legend style={font=\small},
+  axis lines=left,
+]
+\addplot[thick, dashed, color=epngray, mark=none] coordinates {(0,12) (2,9.6) (4,7.2) (6,4.8) (8,2.4) (10,0)};
+\addlegendentry{Ideal}
+\addplot[thick, color=epnblue, mark=*, mark size=1.8pt, mark options={fill=epnblue}] coordinates {(0,12) (10,0)};
+\addlegendentry{Real (confirmado: inicio/cierre)}
+\end{axis}
+\end{tikzpicture}
+\end{center}
+
+\section{Sprint 2 --- Funcionalidades Avanzadas (15 pts, 6 -- 10 jul)}
+
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[
+  width=0.95\textwidth, height=7cm,
+  xlabel={Día hábil del sprint}, ylabel={Story points restantes},
+  xmin=0, xmax=5, ymin=0, ymax=16,
+  xtick={0,1,2,3,4,5}, ytick={0,3,6,9,12,15},
+  grid=both, grid style={line width=.1pt, draw=gray!25},
+  major grid style={line width=.2pt,draw=gray!45},
+  legend pos=north east, legend style={font=\small},
+  axis lines=left,
+]
+\addplot[thick, dashed, color=epngray, mark=none] coordinates {(0,15) (1,12) (2,9) (3,6) (4,3) (5,0)};
+\addlegendentry{Ideal}
+\addplot[thick, color=epnblue, mark=*, mark size=1.8pt, mark options={fill=epnblue}] coordinates {(0,15) (5,0)};
+\addlegendentry{Real (confirmado: inicio/cierre)}
+\end{axis}
+\end{tikzpicture}
+\end{center}
+
+\noindent\textbf{Sprint 2 es un time-box mucho más corto} (5 días hábiles frente a los 10 del Sprint 1)
+con mayor capacidad (15 vs 12 pts), lo que implica una velocidad diaria objetivo casi el triple
+(3 pts/día vs 1.2 pts/día). Esto es relevante para la exposición del Scrum Master sobre la salud del
+sprint: el equipo debió sostener un ritmo de entrega notablemente más alto en la segunda mitad del
+proyecto.
+
+\section{Registro diario para completar (Scrum Master)}
+\label{sec:registro}
+Tabla lista para transcribir los valores reales día a día desde el tablero Kanban / Daily Scrum
+(pestaña 04). El valor \textit{Ideal} ya está calculado; la columna \textit{Real} debe completarse antes
+de la presentación final.
+
+\begin{center}
+\renewcommand{\arraystretch}{1.2}
+\begin{tabular}{|c|c|c|c|}
+\hline
+\rowcolor{epnblue}
+\textcolor{white}{\textbf{Sprint}} & \textcolor{white}{\textbf{Día}} & \textcolor{white}{\textbf{Ideal (pts)}} & \textcolor{white}{\textbf{Real (pts)}} \\
+\hline
+1 & 0 & 12.0 & 12 \\
+\hline
+1 & 2 & 9.6 & \rule{1.2cm}{0.4pt} \\
+\hline
+1 & 4 & 7.2 & \rule{1.2cm}{0.4pt} \\
+\hline
+1 & 6 & 4.8 & \rule{1.2cm}{0.4pt} \\
+\hline
+1 & 8 & 2.4 & \rule{1.2cm}{0.4pt} \\
+\hline
+1 & 10 & 0.0 & 0 \\
+\hline
+2 & 0 & 15.0 & 15 \\
+\hline
+2 & 1 & 12.0 & \rule{1.2cm}{0.4pt} \\
+\hline
+2 & 2 & 9.0 & \rule{1.2cm}{0.4pt} \\
+\hline
+2 & 3 & 6.0 & \rule{1.2cm}{0.4pt} \\
+\hline
+2 & 4 & 3.0 & \rule{1.2cm}{0.4pt} \\
+\hline
+2 & 5 & 0.0 & 0 \\
+\hline
+\end{tabular}
+\end{center}
+
+\section{Qué dicen estos datos sobre la salud del sprint}
+\begin{itemize}[leftmargin=1.4cm]
+  \item Ambos sprints cerraron con el Incremento aceptado en la Sprint Review, es decir, 0 pts
+        pendientes al final del time-box en los dos casos.
+  \item El Sprint Backlog (documento anterior) registra 32 h técnicas en Sprint 1 y 23 h en Sprint 2,
+        repartidas entre los 4 integrantes del Equipo de Desarrollo sin jerarquías internas.
+  \item El único punto de atención documentado por el equipo es la exportación PNG/PDF de 06H6
+        (Sprint 2): reportada como completada por el equipo, pero pendiente de confirmar en el código
+        de este repositorio (ver nota en el Sprint Backlog).
+\end{itemize}
+
+\end{document}

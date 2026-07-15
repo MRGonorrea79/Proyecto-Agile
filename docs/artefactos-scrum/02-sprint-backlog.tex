@@ -1,0 +1,129 @@
+\documentclass[11pt]{article}
+\input{preambulo.tex}
+
+\begin{document}
+\artefactoTitulo{Sprint Backlog}{Desglose de tareas técnicas por sprint y responsable}
+
+\section{Sprint 1 --- Transcripción Base}
+\textbf{Objetivo del Sprint:} implementar la conversión completa de texto español a Braille, incluyendo
+abecedario, vocales acentuadas, números y mayúsculas.
+\quad\textbf{Fechas reales:} 22 jun -- 3 jul 2026 (2 semanas)
+\quad\textbf{Capacidad:} 12 pts \quad \textbf{HUs:} 01H1, 02H2, 03H3, 04H4
+
+\renewcommand{\arraystretch}{1.3}
+\begin{longtable}{|p{3cm}|p{1cm}|p{1.1cm}|p{7.6cm}|}
+\hline
+\rowcolor{epnblue}
+\textcolor{white}{\textbf{Responsable}} & \textcolor{white}{\textbf{HU}} & \textcolor{white}{\textbf{Horas}} & \textcolor{white}{\textbf{Tarea técnica}} \\
+\hline
+\endfirsthead
+\hline
+\rowcolor{epnblue}
+\textcolor{white}{\textbf{Responsable}} & \textcolor{white}{\textbf{HU}} & \textcolor{white}{\textbf{Horas}} & \textcolor{white}{\textbf{Tarea técnica}} \\
+\hline
+\endhead
+\rowcolor{epnrow}
+Erick Costa & 01H1 & 5h & Mapa de caracteres del abecedario español (series 1.\textsuperscript{a}/2.\textsuperscript{a}/3.\textsuperscript{a}) \\
+\hline
+Emily Aumala & 01H1 & 4h & Función de conversión letra $\rightarrow$ patrón Braille \\
+\hline
+\rowcolor{epnrow}
+Javier Angulo & --- & 3h & Interfaz de entrada de texto (\texttt{index.html}) \\
+\hline
+Javier Angulo & 02H2 & 4h & Extensión del mapa de caracteres: vocales acentuadas y ñ \\
+\hline
+\rowcolor{epnrow}
+Elian Caizapanta & 02H2 & 3h & Pruebas de integración de vocales acentuadas y ñ \\
+\hline
+Erick Costa & 03H3 & 4h & Detección de dígitos y signo numérico Braille (puntos 3-4-5-6) \\
+\hline
+\rowcolor{epnrow}
+Emily Aumala & 03H3 & 3h & Validación de secuencias numéricas multi-cifra \\
+\hline
+Javier Angulo & 04H4 & 3h & Detección de mayúsculas e indicador Braille (puntos 4-6) \\
+\hline
+\rowcolor{epnrow}
+Elian Caizapanta & 04H4 & 3h & Pruebas de integración de mayúsculas y enrutamiento del backend \\
+\hline
+\end{longtable}
+\textbf{Total Sprint 1:} 32 h (Erick Costa 9h, Emily Aumala 7h, Javier Angulo 10h, Elian Caizapanta 6h)
+
+\section{Sprint 2 --- Funcionalidades Avanzadas}
+\textbf{Objetivo del Sprint:} agregar puntuación, generar señalética imprimible y habilitar la
+transcripción inversa Braille $\rightarrow$ español.
+\quad\textbf{Fechas reales:} 6 -- 10 jul 2026 (1 semana)
+\quad\textbf{Capacidad:} 15 pts \quad \textbf{HUs:} 05H5, 06H6, 07H7
+
+\begin{longtable}{|p{3cm}|p{1cm}|p{1.1cm}|p{7.6cm}|}
+\hline
+\rowcolor{epnblue}
+\textcolor{white}{\textbf{Responsable}} & \textcolor{white}{\textbf{HU}} & \textcolor{white}{\textbf{Horas}} & \textcolor{white}{\textbf{Tarea técnica}} \\
+\hline
+\endfirsthead
+\hline
+\rowcolor{epnblue}
+\textcolor{white}{\textbf{Responsable}} & \textcolor{white}{\textbf{HU}} & \textcolor{white}{\textbf{Horas}} & \textcolor{white}{\textbf{Tarea técnica}} \\
+\hline
+\endhead
+\rowcolor{epnrow}
+Erick Costa & 05H5 & 3h & Mapa de signos de puntuación básicos (\texttt{, . ; : ¿ ? ¡ !}) \\
+\hline
+Emily Aumala & 05H5 & 2h & Pruebas de oraciones completas con signos de puntuación \\
+\hline
+\rowcolor{epnrow}
+Javier Angulo & 06H6 & 4h & Plantilla de señalética Braille imprimible (Braille espejo) \\
+\hline
+Elian Caizapanta & 06H6 & 5h & Exportación de señalética (renderizado a formato descargable) \\
+\hline
+\rowcolor{epnrow}
+Erick Costa & 07H7 & 5h & Función inversa Braille $\rightarrow$ español (diccionario inverso e indicadores) \\
+\hline
+Emily Aumala & 07H7 & 4h & Interfaz de entrada de patrones Braille para la conversión inversa \\
+\hline
+\end{longtable}
+\textbf{Total Sprint 2:} 23 h (Erick Costa 5h, Emily Aumala 6h, Javier Angulo 4h, Elian Caizapanta 5h)
+
+\vspace{0.2cm}
+\noindent\textit{Nota sobre 06H6:} el equipo reporta la tarea de exportación de señalética (Elian
+Caizapanta) como completada. Al momento de preparar este documento, la rama clonada de este repositorio
+(\texttt{Proyecto-Agile}) todavía no refleja un endpoint de exportación PNG/PDF dedicado --- solo la vista
+de Braille espejo con impresión de navegador. Se recomienda confirmar que el código esté sincronizado
+con la rama \texttt{ITERACION-2} del repositorio de código fuente antes de la entrega final, para que el
+Incremento demostrado coincida con lo documentado aquí.
+
+\section{Horas totales por integrante (ambos sprints)}
+\begin{center}
+\renewcommand{\arraystretch}{1.2}
+\begin{tabular}{|l|c|}
+\hline
+\rowcolor{epnblue}
+\textcolor{white}{\textbf{Integrante}} & \textcolor{white}{\textbf{Horas técnicas}} \\
+\hline
+Javier Angulo & 14h \\
+\hline
+\rowcolor{epnrow}
+Elian Caizapanta & 12h \\
+\hline
+Erick Costa & 14h \\
+\hline
+\rowcolor{epnrow}
+Emily Aumala & 11h \\
+\hline
+\end{tabular}
+\end{center}
+
+\section{Convenciones de trabajo}
+\begin{itemize}[leftmargin=1.4cm]
+  \item El \textbf{Sprint Backlog} es un artefacto creado y de propiedad del propio \textbf{Equipo de
+        Desarrollo} durante el Sprint Planning; nadie externo (ni el Scrum Master ni el Product Owner)
+        asigna las tareas --- el equipo se autoorganiza y cada integrante toma tareas según disponibilidad
+        y habilidad.
+  \item Cada sprint es un \textbf{time-box} de duración fija acordada de antemano (Sprint 1: 2 semanas;
+        Sprint 2: 1 semana), cerrado en la fecha planificada con un objetivo propio, sin extender el plazo
+        aunque quedaran ítems abiertos (ver nota sobre 06H6).
+  \item El \textbf{Scrum Master (Victor Aveiga)} facilita el Daily Scrum (15 registros diarios entre ambos
+        sprints) y remueve impedimentos; el \textbf{Product Owner (José Castro)} prioriza el Product
+        Backlog y acepta el incremento en cada Sprint Review.
+\end{itemize}
+
+\end{document}

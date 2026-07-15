@@ -11,6 +11,18 @@ Aplicación web desarrollada con **Spring Boot** que permite la traducción bidi
 
 ---
 
+## Roles Scrum (equipo)
+
+| Rol Scrum | Integrante | Evidencia principal |
+|-----------|-----------|----------------------|
+| **Product Owner** | José Castro | Product Backlog, Release Plan, Sprint Review (aceptación del incremento) |
+| **Scrum Master** | Victor Aveiga | Daily Scrum, Sprint Retrospective, tablero Kanban, Burndown y velocidad |
+| **Equipo de Desarrollo** | Javier Angulo, Elian Caizapanta, Erick Costa, Emily Aumala | Historias de Usuario técnicas, Sprint Backlog, Definition of Done / Incremento |
+
+> El equipo se autoorganiza: nadie externo asigna las tareas del Sprint Backlog, cada integrante las toma según disponibilidad y habilidad (ver `docs/artefactos-scrum/02-sprint-backlog.pdf`).
+
+---
+
 ## Fases XP del Proyecto
 
 | Fase | Artefactos | Responsable |
@@ -90,16 +102,17 @@ Aplicación web desarrollada con **Spring Boot** que permite la traducción bidi
 
 ---
 
-### *(Nombre del integrante)* — Programador (Codificación)
+### Erick Costa — Programador (Codificación)
 
-**Rol XP:** Programador encargado de la codificación del sistema.
+**Rol XP:** Programador encargado de la codificación del sistema. **Rol Scrum:** Equipo de Desarrollo.
 
 **Artefactos entregados:**
-
-> *Pendiente de completar. Agregar aquí:*
-> - Código implementado (clases, métodos, funcionalidades)
-> - Commits realizados con descripción de cambios
-> - Evidencia de pair programming (si aplica)
+- Sprint 1 (5h): mapa de caracteres del abecedario español (`AlphabetMapService`, HU 01H1)
+- Sprint 1 (4h): detección de dígitos y signo numérico Braille (`NumberMapService`, HU 03H3)
+- Sprint 2 (3h): mapa de signos de puntuación básicos (`PunctuationMapService`, HU 05H5)
+- Sprint 2 (5h): función inversa Braille → español (`InverseBrailleService`, HU 07H7)
+- Documentación de artefactos Scrum del equipo (Product Backlog, Sprint Backlog, Burndown Charts, Incremento) en `docs/artefactos-scrum/`, y contenedor Docker (`Dockerfile`, `docker-compose.yml`) para despliegue reproducible.
+- Concepto Scrum expuesto: **el Sprint como time-box** de duración fija (Sprint 1: 22 jun–3 jul, 2 semanas; Sprint 2: 6–10 jul, 1 semana), cada uno cerrado en su fecha planificada con objetivo propio.
 
 ---
 
@@ -149,12 +162,37 @@ Aplicación web desarrollada con **Spring Boot** que permite la traducción bidi
 ```
 Proyecto-Agile/
 ├── README.md                              ← Este archivo
+├── Dockerfile                             ← Build multi-stage (JDK 25 → JRE 25 Alpine)
+├── docker-compose.yml                     ← docker compose up --build
 ├── docs/
-│   └── design/                            ← Artefactos de Diseño (Elian)
-│       ├── tarjetas-crc.md                ← 12 Tarjetas CRC
-│       ├── diagrama-casos-de-uso.md       ← 8 CU con flujos detallados
-│       ├── diagrama-de-clases.md          ← 12 clases + secuencia
-│       └── roadmap-alfabeto-braille.md    ← Alfabeto Braille + Gantt
+│   ├── design/                            ← Artefactos de Diseño (Elian)
+│   │   ├── tarjetas-crc.md                ← 12 Tarjetas CRC
+│   │   ├── diagrama-casos-de-uso.md       ← 8 CU con flujos detallados
+│   │   ├── diagrama-de-clases.md          ← 12 clases + secuencia
+│   │   └── roadmap-alfabeto-braille.md    ← Alfabeto Braille + Gantt
+│   └── artefactos-scrum/                  ← Artefactos Scrum (LaTeX → PDF)
+│       ├── 01-product-backlog.pdf
+│       ├── 02-sprint-backlog.pdf
+│       ├── 03-burndown-charts.pdf
+│       └── 04-incremento.pdf
+```
+
+## Artefactos Scrum
+
+| Artefacto | Descripción | Archivo |
+|-----------|-------------|---------|
+| Product Backlog | 7 Historias de Usuario priorizadas, estimadas y con estado real | [`01-product-backlog.pdf`](docs/artefactos-scrum/01-product-backlog.pdf) |
+| Sprint Backlog | Tareas técnicas por sprint, responsable y horas reales | [`02-sprint-backlog.pdf`](docs/artefactos-scrum/02-sprint-backlog.pdf) |
+| Burndown Charts | Avance ideal vs. real por sprint, con plantilla para el Scrum Master | [`03-burndown-charts.pdf`](docs/artefactos-scrum/03-burndown-charts.pdf) |
+| Incremento | Funcionalidad entregable, Definition of Done y cómo ejecutarla | [`04-incremento.pdf`](docs/artefactos-scrum/04-incremento.pdf) |
+
+Fuentes LaTeX en `docs/artefactos-scrum/*.tex` (compilables con `pdflatex`, preámbulo compartido en `preambulo.tex`).
+
+## Cómo ejecutar (Docker)
+
+```bash
+docker compose up --build
+# abrir http://localhost:8080
 ```
 
 ---
@@ -175,20 +213,22 @@ Proyecto-Agile/
 
 ## Planificación de Sprints
 
-### Sprint 1 — Transcripción Base (12 pts · 4 semanas)
+> Duración planificada originalmente: 4 semanas/sprint. Duración **real** ejecutada: ver fechas abajo (ambos sprints cerraron antes de lo planificado).
+
+### Sprint 1 — Transcripción Base (12 pts · 22 jun – 3 jul 2026, 2 semanas)
 - **HUs:** 01H1 (5 pts), 02H2 (3 pts), 03H3 (2 pts), 04H4 (2 pts)
 - **Objetivo:** Implementar la conversión completa de texto español a Braille incluyendo abecedario, vocales acentuadas, números y mayúsculas
-- **Velocidad:** 3.0 pts/sem · 24 h estimadas · 96 h disponibles
+- **Velocidad real:** 6.0 pts/sem · 32 h técnicas registradas
 
-### Sprint 2 — Funcionalidades Avanzadas (15 pts · 4 semanas)
+### Sprint 2 — Funcionalidades Avanzadas (15 pts · 6 – 10 jul 2026, 1 semana)
 - **HUs:** 05H5 (3 pts), 06H6 (7 pts), 07H7 (5 pts)
 - **Objetivo:** Agregar puntuación, generación de señalética imprimible y transcripción inversa Braille→español
-- **Velocidad:** 3.8 pts/sem · 28 h estimadas · 96 h disponibles
+- **Velocidad real:** 15.0 pts/sem · 23 h técnicas registradas
 
 ### Velocidad Total del Release
 - **Story Points totales:** 27 pts
-- **Velocidad promedio:** 3.4 pts/sem
-- **Calibración:** 1.9 h/pt
+- **Duración real total:** 3 semanas (22 jun – 10 jul 2026) · 15 Daily Scrums registrados
+- **Horas técnicas totales:** 55 h (Javier Angulo 14h, Erick Costa 14h, Elian Caizapanta 12h, Emily Aumala 11h)
 
 ---
 
