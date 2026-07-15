@@ -1,0 +1,452 @@
+\documentclass[11pt,aspectratio=169]{beamer}
+
+\usetheme{metropolis}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[spanish]{babel}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{colortbl}
+\usepackage{tikz}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepackage{appendixnumberbeamer}
+
+\definecolor{epnblue}{HTML}{2E4C9C}
+\definecolor{epnbluelight}{HTML}{4B6FCB}
+\definecolor{epnrow}{HTML}{EDF1FB}
+\definecolor{epngray}{HTML}{555555}
+\definecolor{epngreen}{HTML}{2E9C5C}
+\definecolor{epnamber}{HTML}{C98A1E}
+\definecolor{epnred}{HTML}{B23B3B}
+
+\setbeamercolor{palette primary}{bg=epnblue, fg=white}
+\setbeamercolor{frametitle}{bg=epnblue, fg=white}
+\setbeamercolor{progress bar}{fg=epnbluelight, bg=epnrow}
+\setbeamercolor{title separator}{fg=epnbluelight}
+\setbeamercolor{alerted text}{fg=epnred}
+\setbeamertemplate{section in toc}[sections numbered]
+\metroset{block=fill, numbering=fraction, progressbar=frametitle}
+
+\newcommand{\rolebadge}[2]{%
+  \begin{tikzpicture}
+    \node[fill=#2, text=white, rounded corners=2pt, inner sep=4pt, font=\bfseries\small] {#1};
+  \end{tikzpicture}%
+}
+
+\title{Spanish Braille Application}
+\subtitle{Aplicando el framework Scrum en un proyecto real de traducción español--Braille}
+\author{\small Javier Angulo, Elian Caizapanta, Erick Costa, Emily Aumala, José Castro, Victor Aveiga}
+\institute{Escuela Politécnica Nacional --- Construcción y Evolución de Software}
+\date{22 jun -- 15 jul 2026}
+
+\begin{document}
+
+\maketitle
+
+\begin{frame}{Agenda}
+  \tableofcontents
+\end{frame}
+
+% =====================================================
+\section{Contexto del producto}
+% =====================================================
+
+\begin{frame}{¿Qué construimos?}
+  \begin{columns}[T]
+    \begin{column}{0.55\textwidth}
+      \textbf{Spanish Braille Application}: app web (Spring Boot + Thymeleaf) que traduce texto en
+      español a Braille Unicode \textbf{y viceversa}.
+      \vspace{0.4cm}
+      \begin{itemize}
+        \item Abecedario completo (a--z) en 3 series Braille
+        \item Vocales acentuadas, ñ, mayúsculas, números
+        \item Signos de puntuación
+        \item \textbf{Braille espejo} para impresión en relieve
+        \item Conversión inversa: Braille $\rightarrow$ español
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.45\textwidth}
+      \begin{alertblock}{Valor de negocio}
+        Accesibilidad: generar y leer material Braille en español, sin herramientas especializadas.
+      \end{alertblock}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{Por qué Scrum (y no solo escribir código)}
+  \begin{center}
+    \Large
+    El reto no era técnico solamente: era \alert{entregar valor de forma incremental},
+    con \alert{visibilidad diaria} del avance y \alert{feedback} continuo del Product Owner.
+  \end{center}
+  \vspace{0.5cm}
+  \begin{center}
+    \small Por eso el equipo adoptó \textbf{Scrum} como framework de gestión sobre el desarrollo técnico.
+  \end{center}
+\end{frame}
+
+% =====================================================
+\section{Scrum: el framework}
+% =====================================================
+
+\begin{frame}{¿Qué es Scrum?}
+  \begin{block}{Definición}
+    Framework \textbf{ligero} y \textbf{empírico} para desarrollar, entregar y sostener productos
+    complejos, a través de ciclos cortos e iterativos llamados \textbf{Sprints}.
+  \end{block}
+  \begin{columns}[T]
+    \begin{column}{0.5\textwidth}
+      \textbf{3 pilares (empirismo):}
+      \begin{itemize}
+        \item Transparencia
+        \item Inspección
+        \item Adaptación
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.5\textwidth}
+      \textbf{5 valores:}
+      \begin{itemize}
+        \item Compromiso \quad \item Foco
+        \item Apertura \quad \item Respeto
+        \item Coraje
+      \end{itemize}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{Roles Scrum del equipo}
+  \renewcommand{\arraystretch}{1.4}
+  \begin{table}
+    \small
+    \begin{tabular}{|>{\bfseries}p{2.6cm}|p{3.2cm}|p{5.5cm}|}
+      \hline
+      \rowcolor{epnblue}
+      \textcolor{white}{Rol} & \textcolor{white}{Integrante} & \textcolor{white}{Enfoque} \\
+      \hline
+      Product Owner & José Castro & Voz del negocio, prioriza el Product Backlog, acepta el Incremento \\
+      \hline
+      \rowcolor{epnrow}
+      Scrum Master & Victor Aveiga & Facilita el proceso, elimina impedimentos, cuida la salud del equipo \\
+      \hline
+      Equipo de Desarrollo & Javier, Elian, Erick, Emily & Autoorganizado, multifuncional, sin jerarquías internas \\
+      \hline
+    \end{tabular}
+  \end{table}
+\end{frame}
+
+\begin{frame}{Concepto Scrum --- El Sprint como \emph{time-box}}
+  \begin{block}{¿Por qué duración fija?}
+    Un Sprint tiene una duración \textbf{fija y acordada de antemano} (2--4 semanas según el
+    framework). No se extiende aunque falten ítems: eso protege el ritmo del equipo y obliga a
+    priorizar.
+  \end{block}
+  \begin{exampleblock}{Aplicado en este proyecto}
+    \begin{itemize}
+      \item \textbf{Sprint 1:} 22 jun -- 3 jul 2026 (2 semanas)
+      \item \textbf{Sprint 2:} 6 -- 10 jul 2026 (1 semana)
+    \end{itemize}
+    Cada uno cerró en su fecha planificada, con objetivo propio y Sprint Review al final.
+  \end{exampleblock}
+\end{frame}
+
+% =====================================================
+\section{Eventos y artefactos Scrum}
+% =====================================================
+
+\begin{frame}{Los 4 eventos Scrum en el proyecto}
+  \begin{enumerate}
+    \item \textbf{Sprint Planning} --- el equipo define el objetivo y toma HUs del Product Backlog
+    \item \textbf{Daily Scrum} --- 15 registros diarios entre ambos sprints (10 + 5)
+    \item \textbf{Sprint Review} --- se demuestra el Incremento; el PO lo acepta o no
+    \item \textbf{Sprint Retrospective} --- qué mejorar para el siguiente sprint
+  \end{enumerate}
+  \vspace{0.3cm}
+  \centering\small Facilitados por el \textbf{Scrum Master (Victor Aveiga)} en todo el ciclo.
+\end{frame}
+
+\begin{frame}{Los 3 artefactos Scrum}
+  \begin{columns}[T]
+    \begin{column}{0.33\textwidth}
+      \textbf{Product Backlog}\\
+      \small Lista priorizada y viva de todo lo que el producto podría necesitar. Propiedad del PO.
+    \end{column}
+    \begin{column}{0.33\textwidth}
+      \textbf{Sprint Backlog}\\
+      \small Objetivo + HUs + plan de tareas del sprint. Propiedad del Equipo de Desarrollo.
+    \end{column}
+    \begin{column}{0.33\textwidth}
+      \textbf{Incremento}\\
+      \small Suma de todo lo \emph{Terminado} (Definition of Done), potencialmente entregable.
+    \end{column}
+  \end{columns}
+  \vspace{0.5cm}
+  \begin{alertblock}{En este proyecto también usamos}
+    \textbf{Burndown Chart} como herramienta de seguimiento visual del avance día a día.
+  \end{alertblock}
+\end{frame}
+
+\begin{frame}{Product Backlog --- 7 Historias de Usuario}
+  \begin{center}
+  \scriptsize
+  \renewcommand{\arraystretch}{1.3}
+  \begin{tabular}{|c|p{5.4cm}|c|c|c|}
+    \hline
+    \rowcolor{epnblue}
+    \textcolor{white}{ID} & \textcolor{white}{Historia de Usuario} & \textcolor{white}{Pts} & \textcolor{white}{Prioridad} & \textcolor{white}{Sprint} \\
+    \hline
+    01H1 & Transcribir abecedario (a--z, 3 series) a Braille & 5 & Alta & 1 \\
+    \rowcolor{epnrow} 02H2 & Convertir vocales acentuadas y ñ & 3 & Media & 1 \\
+    03H3 & Transcribir números con signo numérico & 2 & Alta & 1 \\
+    \rowcolor{epnrow} 04H4 & Manejar mayúsculas con indicador Braille & 2 & Media & 1 \\
+    05H5 & Convertir signos de puntuación básicos & 3 & Media & 2 \\
+    \rowcolor{epnrow} 06H6 & Generar señalética Braille imprimible/exportable & 7 & Alta & 2 \\
+    07H7 & Transcripción inversa Braille $\rightarrow$ español & 5 & Alta & 2 \\
+    \hline
+  \end{tabular}
+
+  \vspace{0.3cm}
+  \normalsize \textbf{27 story points totales}
+  \end{center}
+\end{frame}
+
+% =====================================================
+\section{Sprint 1 --- Transcripción Base}
+% =====================================================
+
+\begin{frame}{Sprint 1: objetivo y alcance}
+  \begin{block}{Objetivo del Sprint}
+    Implementar la conversión completa de texto español a Braille: abecedario, acentos, números y
+    mayúsculas.
+  \end{block}
+  \begin{columns}[T]
+    \begin{column}{0.5\textwidth}
+      \textbf{Fechas:} 22 jun -- 3 jul 2026\\
+      \textbf{Capacidad:} 12 pts\\
+      \textbf{HUs:} 01H1, 02H2, 03H3, 04H4
+    \end{column}
+    \begin{column}{0.5\textwidth}
+      \textbf{Resultado:} 12/12 pts entregados\\
+      \textbf{Horas técnicas:} 32h
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{Sprint 1: quién hizo qué}
+  \scriptsize
+  \renewcommand{\arraystretch}{1.3}
+  \begin{tabular}{|l|c|c|p{5.8cm}|}
+    \hline
+    \rowcolor{epnblue}
+    \textcolor{white}{Responsable} & \textcolor{white}{HU} & \textcolor{white}{h} & \textcolor{white}{Tarea} \\
+    \hline
+    Erick Costa & 01H1 & 5h & Mapa de caracteres del abecedario \\
+    \rowcolor{epnrow} Emily Aumala & 01H1 & 4h & Función letra $\rightarrow$ patrón Braille \\
+    Javier Angulo & 02H2 & 4h & Vocales acentuadas y ñ \\
+    \rowcolor{epnrow} Elian Caizapanta & 02H2/04H4 & 6h & Pruebas de integración + enrutamiento \\
+    Erick Costa & 03H3 & 4h & Signo numérico Braille \\
+    \rowcolor{epnrow} Emily Aumala & 03H3 & 3h & Validación multi-cifra \\
+    Javier Angulo & 04H4 & 3h & Indicador de mayúscula \\
+    \hline
+  \end{tabular}
+\end{frame}
+
+\begin{frame}{Burndown --- Sprint 1}
+  \begin{center}
+  \begin{tikzpicture}
+    \begin{axis}[
+      width=0.85\textwidth, height=6cm,
+      xlabel={Día hábil}, ylabel={Pts restantes},
+      xmin=0, xmax=10, ymin=0, ymax=13,
+      xtick={0,2,4,6,8,10}, ytick={0,3,6,9,12},
+      grid=both, grid style={line width=.1pt, draw=gray!25},
+      legend pos=north east, legend style={font=\tiny},
+      axis lines=left,
+    ]
+    \addplot[thick, dashed, color=epngray] coordinates {(0,12) (2,9.6) (4,7.2) (6,4.8) (8,2.4) (10,0)};
+    \addlegendentry{Ideal}
+    \addplot[thick, color=epnblue, mark=*, mark size=1.8pt] coordinates {(0,12) (10,0)};
+    \addlegendentry{Real}
+    \end{axis}
+  \end{tikzpicture}
+  \end{center}
+  \centering\small Incremento aceptado en Sprint Review --- 0 pts pendientes al cierre.
+\end{frame}
+
+% =====================================================
+\section{Sprint 2 --- Funcionalidades Avanzadas}
+% =====================================================
+
+\begin{frame}{Sprint 2: objetivo y alcance}
+  \begin{block}{Objetivo del Sprint}
+    Agregar puntuación, señalética imprimible y transcripción inversa Braille $\rightarrow$ español.
+  \end{block}
+  \begin{columns}[T]
+    \begin{column}{0.5\textwidth}
+      \textbf{Fechas:} 6 -- 10 jul 2026\\
+      \textbf{Capacidad:} 15 pts\\
+      \textbf{HUs:} 05H5, 06H6, 07H7
+    \end{column}
+    \begin{column}{0.5\textwidth}
+      \textbf{Resultado:} 15/15 pts reportados\\
+      \textbf{Horas técnicas:} 23h
+    \end{column}
+  \end{columns}
+  \begin{alertblock}{Time-box más agresivo}
+    5 días hábiles vs. 10 del Sprint 1, con \emph{más} capacidad (15 vs 12 pts) $\Rightarrow$ velocidad
+    diaria objetivo casi el triple.
+  \end{alertblock}
+\end{frame}
+
+\begin{frame}{Sprint 2: quién hizo qué}
+  \scriptsize
+  \renewcommand{\arraystretch}{1.3}
+  \begin{tabular}{|l|c|c|p{5.8cm}|}
+    \hline
+    \rowcolor{epnblue}
+    \textcolor{white}{Responsable} & \textcolor{white}{HU} & \textcolor{white}{h} & \textcolor{white}{Tarea} \\
+    \hline
+    Erick Costa & 05H5 & 3h & Mapa de signos de puntuación \\
+    \rowcolor{epnrow} Emily Aumala & 05H5 & 2h & Pruebas de oraciones con signos \\
+    Javier Angulo & 06H6 & 4h & Plantilla de señalética (Braille espejo) \\
+    \rowcolor{epnrow} Elian Caizapanta & 06H6 & 5h & Exportación de señalética \\
+    Erick Costa & 07H7 & 5h & Función inversa Braille $\rightarrow$ español \\
+    \rowcolor{epnrow} Emily Aumala & 07H7 & 4h & Interfaz de entrada Braille \\
+    \hline
+  \end{tabular}
+\end{frame}
+
+\begin{frame}{Concepto Scrum --- El Sprint Backlog es del equipo}
+  \begin{block}{¿Quién lo crea?}
+    El \textbf{propio Equipo de Desarrollo}, durante el Sprint Planning. \textbf{Nadie se lo asigna
+    desde afuera.}
+  \end{block}
+  \begin{itemize}
+    \item Cada integrante toma tareas según disponibilidad y habilidad
+    \item Sin jerarquías internas dentro del equipo
+    \item Así se planificaron el Sprint 1 y el Sprint 2 de este proyecto
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Burndown --- Sprint 2}
+  \begin{center}
+  \begin{tikzpicture}
+    \begin{axis}[
+      width=0.85\textwidth, height=6cm,
+      xlabel={Día hábil}, ylabel={Pts restantes},
+      xmin=0, xmax=5, ymin=0, ymax=16,
+      xtick={0,1,2,3,4,5}, ytick={0,3,6,9,12,15},
+      grid=both, grid style={line width=.1pt, draw=gray!25},
+      legend pos=north east, legend style={font=\tiny},
+      axis lines=left,
+    ]
+    \addplot[thick, dashed, color=epngray] coordinates {(0,15) (1,12) (2,9) (3,6) (4,3) (5,0)};
+    \addlegendentry{Ideal}
+    \addplot[thick, color=epnblue, mark=*, mark size=1.8pt] coordinates {(0,15) (5,0)};
+    \addlegendentry{Real}
+    \end{axis}
+  \end{tikzpicture}
+  \end{center}
+  \centering\small 06H6 (exportación) reportada como cerrada por el equipo --- pendiente de confirmar en código.
+\end{frame}
+
+% =====================================================
+\section{Definition of Done e Incremento}
+% =====================================================
+
+\begin{frame}{Concepto Scrum --- Definition of Done}
+  \begin{alertblock}{No es solo ``código escrito''}
+    Es \textbf{``probado e integrado''}: compila, tiene al menos una prueba unitaria, y es accesible
+    end-to-end desde la interfaz web.
+  \end{alertblock}
+  \begin{itemize}
+    \item[\checkmark] Código integrado en la rama principal
+    \item[\checkmark] Compila y arranca (\texttt{mvn spring-boot:run})
+    \item[\checkmark] Pruebas unitarias: 7 casos en \texttt{BrailleConverterServiceTest} + \texttt{InverseBrailleServiceTest}
+    \item[\checkmark] Arquitectura SOLID (un servicio, una responsabilidad)
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{El Incremento}
+  \begin{block}{Definición}
+    La suma de todos los ítems \emph{Terminados} del Backlog, integrados en un producto
+    \textbf{potencialmente entregable}.
+  \end{block}
+  \textbf{Lo que el usuario puede usar hoy:}
+  \begin{itemize}
+    \item Transcripción español $\rightarrow$ Braille completa
+    \item Transcripción Braille $\rightarrow$ español (inversa)
+    \item Braille espejo para impresión en relieve
+    \item Contenedor Docker reproducible (\texttt{docker compose up --build})
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Concepto Scrum --- Autoorganización del equipo}
+  \begin{block}{Nadie reparte el trabajo}
+    Ni el Scrum Master ni el Product Owner le dicen al Equipo de Desarrollo cómo dividirse las
+    tareas.
+  \end{block}
+  \begin{itemize}
+    \item El equipo decide quién toma cada tarea según disponibilidad y habilidad
+    \item Equipo \textbf{multifuncional}: todos pueden tocar distintas capas del sistema
+    \item Sin jerarquías internas entre Javier, Elian, Erick y Emily
+  \end{itemize}
+\end{frame}
+
+% =====================================================
+\section{Review, Retrospectiva y aprendizajes}
+% =====================================================
+
+\begin{frame}{Sprint Review}
+  \begin{itemize}
+    \item El \textbf{Product Owner (José Castro)} inspeccionó el Incremento al cierre de cada sprint
+    \item Ambos incrementos fueron \textbf{aceptados}
+    \item El Product Backlog se actualizó después de cada review para confirmar el alcance del
+          siguiente sprint
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Sprint Retrospective}
+  \begin{columns}[T]
+    \begin{column}{0.5\textwidth}
+      \textbf{\textcolor{epngreen}{Qué salió bien}}
+      \begin{itemize}
+        \item Ambos sprints cerraron con el 100\% de los pts comprometidos
+        \item Arquitectura SOLID facilitó dividir el trabajo entre 4 personas
+        \item Cero extensiones de plazo (time-box respetado)
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.5\textwidth}
+      \textbf{\textcolor{epnamber}{Qué mejorar}}
+      \begin{itemize}
+        \item Tablero sin actualización diaria granular
+        \item 06H6 (exportación) sin confirmar en código
+        \item Sprint 2 con ritmo muy exigente (5 días, 15 pts)
+      \end{itemize}
+    \end{column}
+  \end{columns}
+  \vspace{0.3cm}
+  \begin{exampleblock}{Acciones acordadas}
+    Adoptar tablero Kanban con actualización diaria; mover el residual de 06H6 al próximo sprint.
+  \end{exampleblock}
+\end{frame}
+
+\begin{frame}{Aprendizajes de Metodologías Ágiles}
+  \begin{enumerate}
+    \item El \textbf{time-box} obliga a priorizar en lugar de extender el plazo
+    \item Los artefactos (Backlog, Sprint Backlog, Incremento) son \textbf{vivos}, no documentos estáticos de una sola vez
+    \item La \textbf{autoorganización} funciona mejor con una arquitectura que permite dividir el
+          trabajo sin bloquear a nadie
+    \item El \textbf{Definition of Done} evita declarar ``terminado'' algo que solo compila
+    \item El \textbf{Burndown} es útil solo si se alimenta con datos diarios reales, no al cierre
+  \end{enumerate}
+\end{frame}
+
+\begin{frame}[standout]
+  ¡Gracias!\\
+  \small ¿Preguntas?
+\end{frame}
+
+\end{document}

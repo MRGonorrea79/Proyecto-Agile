@@ -170,11 +170,13 @@ Proyecto-Agile/
 │   │   ├── diagrama-casos-de-uso.md       ← 8 CU con flujos detallados
 │   │   ├── diagrama-de-clases.md          ← 12 clases + secuencia
 │   │   └── roadmap-alfabeto-braille.md    ← Alfabeto Braille + Gantt
-│   └── artefactos-scrum/                  ← Artefactos Scrum (LaTeX → PDF)
-│       ├── 01-product-backlog.pdf
-│       ├── 02-sprint-backlog.pdf
-│       ├── 03-burndown-charts.pdf
-│       └── 04-incremento.pdf
+│   ├── artefactos-scrum/                  ← Artefactos Scrum (LaTeX → PDF)
+│   │   ├── 01-product-backlog.pdf
+│   │   ├── 02-sprint-backlog.pdf
+│   │   ├── 03-burndown-charts.pdf
+│   │   └── 04-incremento.pdf
+│   └── presentacion/                      ← Diapositivas de la exposición (Beamer → PDF)
+│       └── presentacion.pdf
 ```
 
 ## Artefactos Scrum
@@ -187,6 +189,10 @@ Proyecto-Agile/
 | Incremento | Funcionalidad entregable, Definition of Done y cómo ejecutarla | [`04-incremento.pdf`](docs/artefactos-scrum/04-incremento.pdf) |
 
 Fuentes LaTeX en `docs/artefactos-scrum/*.tex` (compilables con `pdflatex`, preámbulo compartido en `preambulo.tex`).
+
+## Diapositivas de la exposición
+
+[`docs/presentacion/presentacion.pdf`](docs/presentacion/presentacion.pdf) --- 31 diapositivas (Beamer, tema Metropolis) centradas en la metodología ágil: framework Scrum, roles, eventos y artefactos, recorrido de Sprint 1 y Sprint 2 con datos reales (fechas, responsables, horas, burndown), Definition of Done, Incremento, Sprint Review/Retrospective y aprendizajes. Incluye las 4 exposiciones de concepto Scrum asignadas al equipo (time-box, Sprint Backlog, Definition of Done, autoorganización). Fuente en `docs/presentacion/presentacion.tex`.
 
 ## Cómo ejecutar (Docker)
 
